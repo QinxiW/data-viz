@@ -1,4 +1,6 @@
 // import { headline_cpi } from 'converted_data';
+//
+// overall line graph of 5 inflation group on year
 
 // Define the data for the line graph
 // const data = window.headline_cpi;
