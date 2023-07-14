@@ -1,11 +1,12 @@
-
+// import { headline_cpi } from 'converted_data';
 
 // Define the data for the line graph
-const headline_cpi_data = window.headline_cpi;
-console.log(headline_cpi_data);
-
-const energy_cpi_data = window.energy_cpi;
-console.log(energy_cpi_data);
+// const data = window.headline_cpi;
+const data = [
+        ...window.headline_cpi, ...window.energy_cpi
+];
+console.log(window.headline_cpi);
+console.log(data);
 //     [
 //     {x: 0, y: 5},
 //     {x: 1, y: 10},
@@ -27,11 +28,11 @@ const svg = d3.select("body")
 
 // Define the scales for x and y axes
 const xScale = d3.scaleLinear()
-    .domain([0, d3.max(headline_cpi, d => d.x)]) // Adjust the domain according to your data
+    .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
     .range([0, width]);
 
 const yScale = d3.scaleLinear()
-    .domain([0, d3.max(headline_cpi, d => d.y)]) // Adjust the domain according to your data
+    .domain([0, d3.max(data, d => d.y)]) // Adjust the domain according to your data
     .range([height, 0]);
 
 // Define the line function
@@ -41,15 +42,17 @@ const line = d3.line()
 
 // Append the line to the SVG container
 svg.append("path")
-    .datum(headline_cpi_data)
+    .datum(data)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 2)
     .attr("d", line);
 
-svg.append("path")
-    .datum(energy_cpi_data)
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-width", 2)
-    .attr("d", line);
+data.forEach((lineData, index) => {
+    svg.append("path")
+        .datum(lineData)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 2)
+        .attr("d", line);
+});
