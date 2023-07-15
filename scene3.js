@@ -36,7 +36,7 @@ svg.append("g")
     .call(d3.axisBottom(x));
 
 var y = d3.scaleLinear()
-    .domain([-10,30])  // todo custom
+    .domain([-100,60])  // todo custom
     .range([ height, 0]);
 
 svg.append("g")
@@ -137,7 +137,7 @@ function updatePer(year_start, year_end) {
     // window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'
     energy_endValue = window.energy_cpi_dict?.year_end ?? 0
     energy_startValue = window.energy_cpi_dict?.year_start ?? 1
-    const energy_percentageDiff = ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100;
+    const energy_percentageDiff = energy_endValue !== 0 ? ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100 : 0;
 
     food_endValue = window.food_cpi_dict[year_end]
     food_startValue = window.food_cpi_dict[year_start]
