@@ -112,22 +112,19 @@ const axisLabelsText =
 
 // preview before select dropdown
 svg.selectAll("rect")
-    .data([window.headline_cpi[0].y, window.energy_cpi[0].y])
+    .data([window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
+        window.core_cpi[0], window.producer_pi[0]])
     .enter()
     .append("rect")
     .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-    .attr("x", d => xScale(d.x))
-    .attr("width", xScale.bandwidth())
+    .attr("x", (d,i) => i * 200 + 100)
+    .attr("width", xScale.bandwidth() * 5)
     .transition()
     .duration(1500)
     .attr("height", d => Math.abs(y(d.y) - y(0)))
-    // .attr("y", d => y(d.y))
-    // .attr("width", xScale.bandwidth())
-    // .attr("height", d => height - margin.bottom - y(d.y))
     .attr("fill", "steelblue");
 
 
-// test curser
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
 
