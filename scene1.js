@@ -6,28 +6,17 @@ const data = [
         ...window.core_cpi, ...window.producer_pi
 ];
 console.log(data[0]);
-//     [
-//     {x: 0, y: 5},
+//     [{x: 0, y: 5},
 //     {x: 1, y: 10},
 //     {x: 2, y: 8},
-//     {x: 3, y: 15},
-//     {x: 4, y: 12},
 // ];
 
-
 // Set the dimensions of the SVG container
-// const width = 800;
-// const height = 400;
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
 // Create the SVG container
-// const svg = d3.select("body")
-//     .append("svg")
-//     .attr("width", width)
-//     .attr("height", height);
-
 const svg = d3.select("body")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -36,17 +25,6 @@ const svg = d3.select("body")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Define the scales for x and y axes
-// const xScale =
-//     d3.scaleLinear()
-//     // .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
-//     .domain([1970, 2025])
-//     .range([0, width]);
-//
-// const yScale =
-//     d3.scaleLinear()
-//     .domain([-10, d3.max(data, d => d.y)]) // Adjust the domain according to your data
-//     .range([height, 0]);
-
 var x = d3.scaleLinear()
     .domain([1970, 2025])
     .range([ 0, width ]);
@@ -79,6 +57,7 @@ svg.append("line")
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "5,5");
 
+// Graph line plot
 // Append the line to the SVG container
 svg.append("path")
     .datum(window.headline_cpi)
@@ -94,14 +73,12 @@ svg.append("path")
     .attr("stroke-width", 2)
     .attr("d", line);
 
-
 svg.append("path")
     .datum(window.food_cpi)
     .attr("fill", "none")
     .attr("stroke", "purple")
     .attr("stroke-width", 2)
     .attr("d", line);
-
 
 svg.append("path")
     .datum(window.core_cpi)
@@ -110,7 +87,6 @@ svg.append("path")
     .attr("stroke-width", 2)
     .attr("d", line);
 
-
 svg.append("path")
     .datum(window.producer_pi)
     .attr("fill", "none")
@@ -118,6 +94,8 @@ svg.append("path")
     .attr("stroke-width", 2)
     .attr("d", line);
 
+
+// shade above and below the zero line
 const areaBelow = d3.area()
     .x(d => x(d.x))
     .y0(d => zeroY)
@@ -128,7 +106,7 @@ const areaAbove = d3.area()
     .y0(d => zeroY)
     .y1(margin.top); // Upper boundary of the area
 
-// // Draw the areas
+// Draw the areas
 svg.append("path")
     .datum(data)
     .attr("fill", "lightgreen")
@@ -141,7 +119,7 @@ svg.append("path")
     .attr("fill-opacity", 0.1)
     .attr("d", areaBelow);
 
-
+// legend info
 const legendData = [
         { label: "headline_cpi", color: "steelblue" },
         { label: "energy_cpi", color: "brown" },

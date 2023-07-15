@@ -1,11 +1,5 @@
 // filter by inflation category on year row
 
-// Define the data for the line graph
-const data = [
-    ...window.headline_cpi, ...window.energy_cpi, ...window.food_cpi,
-    ...window.core_cpi, ...window.producer_pi
-];
-
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 1200 - margin.left - margin.right,
@@ -21,19 +15,7 @@ const svg = d3.select("body")
 
 var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
 
-var color = d3.scaleOrdinal()
-    .domain(cpi_keys)
-    .range(d3.schemeCategory10);
-
 //Dropdown
-d3.select("#selectButton")
-    .selectAll('myOptions')
-    .data(cpi_keys)
-    .enter()
-    .append('option')
-    .text(function (d) { return d; }) // text showed in the menu
-    .attr("value", function (d) { return d; })
-
 d3.select("#dropdown")
     .selectAll("option")
     .data(cpi_keys)
@@ -42,7 +24,7 @@ d3.select("#dropdown")
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; })
 
-
+// set x and y scale
 var x = d3.scaleLinear()
     .domain([1970,2025])
     .range([ 0, width ]);
@@ -50,13 +32,13 @@ svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
 
-// Add Y axis
 var y = d3.scaleLinear()
     .domain([-10,30])
     .range([ height, 0]);
 svg.append("g")
     .call(d3.axisLeft(y));
 
+// create a line func
 const line = d3.line()
     .x(d => x(d.x))
     .y(d => y(d.y));
@@ -74,7 +56,7 @@ svg.append("line")
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "5,5");
 
-
+// legend data info
 const legendData = [
     { label: "headline_cpi", color: "steelblue" },
     { label: "energy_cpi", color: "brown" },
@@ -110,10 +92,12 @@ legendItems.append("text")
     .attr("alignment-baseline", "middle")
     .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
 
+// scale for the bars
 const xScale = d3.scaleBand()
     .domain(window.headline_cpi.map(d => d.x))
     .range([0, width - margin.right])
     .padding(0.1);
+
 
 // preview before select dropdown
 svg.selectAll("rect")
