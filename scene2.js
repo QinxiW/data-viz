@@ -60,56 +60,71 @@ svg.append("g")
 const line = d3.line()
     .x(d => x(d.x))
     .y(d => y(d.y));
+
+const xScale = d3.scaleBand()
+    .domain(window.headline_cpi.map(d => d.x))
+    .range([margin.left, width - margin.right])
+    .padding(0.1);
 d3.select("#dropdown")
     .on("change", function() {
         const selectedOption = d3.select(this).property("value");
         console.log("Selected option:", selectedOption);
 
         if(selectedOption === 'energy_cpi'){
-            // d3.select('svg')
-            //     .append("g")
-            //     .attr("transform", "translate(50,50)")
-            //     .selectAll("rect")
-            //     .data(window.energy_cpi)
-            //     .enter()
-            //     .append("rect")
-            //     .attr("x", (d, i) => i*xScale.bandwidth())
-            //     .attr("y", (d, i) => y[i] )
-            //     .attr("width", xScale.bandwidth())
-            //     .attr("height", (d, i) => i);
-            svg.append("path")
-                .datum(window.energy_cpi)
-                .attr("fill", "none")
-                .attr("stroke", "brown")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+            svg.selectAll("rect").remove();
+            // Draw the bars
+            svg.selectAll("rect")
+                .data(window.energy_cpi)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => y(d.y))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("fill", "brown");
         } else if (selectedOption === 'headline_cpi') {
-            svg.append("path")
-                .datum(window.headline_cpi)
-                .attr("fill", "none")
-                .attr("stroke", "steelblue")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+            svg.selectAll("rect").remove();
+            svg.selectAll("rect")
+                .data(window.headline_cpi)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => y(d.y))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("fill", "steelblue");
         } else if (selectedOption === 'core_cpi') {
-            svg.append("path")
-                .datum(window.core_cpi)
-                .attr("fill", "orange")
-                .attr("stroke", "orange")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+            svg.selectAll("rect").remove();
+            svg.selectAll("rect")
+                .data(window.core_cpi)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => y(d.y))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("fill", "orange");
         } else if (selectedOption === 'food_cpi') {
-            svg.append("path")
-                .datum(window.food_cpi)
-                .attr("fill", "purple")
-                .attr("stroke", "purple")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+            svg.selectAll("rect").remove();
+            svg.selectAll("rect")
+                .data(window.food_cpi)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => y(d.y))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("fill", "purple");
         } else if (selectedOption === 'producer_pi') {
-            svg.append("path")
-                .datum(window.producer_pi)
-                .attr("fill", "darkgreen")
-                .attr("stroke", "darkgreen")
-                .attr("stroke-width", 2)
-                .attr("d", line);
+            svg.selectAll("rect").remove();
+            svg.selectAll("rect")
+                .data(window.producer_pi)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => y(d.y))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("fill", "darkgreen");
         }
     });
