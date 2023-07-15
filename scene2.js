@@ -61,10 +61,40 @@ const line = d3.line()
     .x(d => x(d.x))
     .y(d => y(d.y));
 
+// Calculate y-coordinate for zero line
+const zeroY = y(0);
+
+// Append line element for zero line
+svg.append("line")
+    .attr("x1", 0)
+    .attr("y1", zeroY)
+    .attr("x2", width)
+    .attr("y2", zeroY)
+    .attr("stroke", "black")
+    .attr("stroke-width", 2)
+    .attr("stroke-dasharray", "5,5");
+
+
 const xScale = d3.scaleBand()
     .domain(window.headline_cpi.map(d => d.x))
     .range([margin.left, width - margin.right])
     .padding(0.1);
+
+// preview before select dropdown
+svg.selectAll("rect")
+    .data(window.headline_cpi)
+    .enter()
+    .append("rect")
+    .attr("x", d => xScale(d.x))
+    .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
+    .attr("width", xScale.bandwidth())
+    .attr("height", d => Math.abs(y(d.y) - y(0)))
+    // .attr("y", d => y(d.y))
+    // .attr("width", xScale.bandwidth())
+    // .attr("height", d => height - margin.bottom - y(d.y))
+    .attr("fill", "steelblue");
+
+
 d3.select("#dropdown")
     .on("change", function() {
         const selectedOption = d3.select(this).property("value");
@@ -78,9 +108,9 @@ d3.select("#dropdown")
                 .enter()
                 .append("rect")
                 .attr("x", d => xScale(d.x))
-                .attr("y", d => y(d.y))
+                .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "brown");
         } else if (selectedOption === 'headline_cpi') {
             svg.selectAll("rect").remove();
@@ -89,9 +119,9 @@ d3.select("#dropdown")
                 .enter()
                 .append("rect")
                 .attr("x", d => xScale(d.x))
-                .attr("y", d => y(d.y))
+                .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "steelblue");
         } else if (selectedOption === 'core_cpi') {
             svg.selectAll("rect").remove();
@@ -100,9 +130,9 @@ d3.select("#dropdown")
                 .enter()
                 .append("rect")
                 .attr("x", d => xScale(d.x))
-                .attr("y", d => y(d.y))
+                .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "orange");
         } else if (selectedOption === 'food_cpi') {
             svg.selectAll("rect").remove();
@@ -111,9 +141,9 @@ d3.select("#dropdown")
                 .enter()
                 .append("rect")
                 .attr("x", d => xScale(d.x))
-                .attr("y", d => y(d.y))
+                .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "purple");
         } else if (selectedOption === 'producer_pi') {
             svg.selectAll("rect").remove();
@@ -122,9 +152,9 @@ d3.select("#dropdown")
                 .enter()
                 .append("rect")
                 .attr("x", d => xScale(d.x))
-                .attr("y", d => y(d.y))
+                .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
                 .attr("width", xScale.bandwidth())
-                .attr("height", d => height - margin.bottom - y(d.y))
+                .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "darkgreen");
         }
     });
