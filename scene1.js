@@ -6,10 +6,6 @@ const data = [
         [...window.core_cpi], [...window.producer_pi]
 ];
 console.log(data);
-//     [{x: 0, y: 5},
-//     {x: 1, y: 10},
-//     {x: 2, y: 8},
-// ];
 
 // Set the dimensions of the SVG container
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
@@ -56,44 +52,6 @@ svg.append("line")
     .attr("stroke", "black")
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "5,5");
-
-// tool tip
-// var tooltip = d3.select("body")
-//     .append("div")
-//     .style("opacity", 0)
-//     .attr("class", "tooltip")
-//     .style("background-color", "white")
-//     .style("border", "solid")
-//     .style("border-width", "1px")
-//     .style("border-radius", "5px")
-//     .style("padding", "10px")
-//
-//
-// // A function that change this tooltip when the user hover a point.
-// // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-// var mouseover = function(d) {
-//         console.log('hi');
-//         tooltip
-//             .style("opacity", 1)
-// }
-//
-// var mousemove = function(d) {
-//         console.log(d);
-//         tooltip
-//             .html("The exact value of<br>the inflation for year is: " + d.y + d.x)
-//             .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-//             .style("top", (d3.mouse(this)[1]) + "px")
-// }
-
-// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-// var mouseleave = function(d) {
-//         // console.log(d);
-//         tooltip
-//             .transition()
-//             .duration(200)
-//             .style("opacity", 0)
-// }
-
 
 // Graph line plot
 // Append the line to the SVG container
@@ -151,9 +109,6 @@ svg.append("path")
     .duration(2000)
     .attr("stroke-width", 2)
     .attr("d", line);
-    // .on("mouseover", mouseover )
-    // .on("mousemove", mousemove )
-    // .on("mouseleave", mouseleave );
 
 
 // shade above and below the zero line
@@ -216,52 +171,19 @@ legendItems.append("text")
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
 
-// // Create the circle that travels along the curve of chart
-// var focus = svg
-//     .append('g')
-//     .append('circle')
-//     .style("fill", "none")
-//     .attr("stroke", "black")
-//     .attr('r', 8.5)
-//     .style("opacity", 0)
-
-// Create the text that travels along the curve of chart
-// var focusText = svg
-//     .append('g')
-//     .append('text')
-//     .style("opacity", 0)
-//     .attr("text-anchor", "left")
-//     .attr("alignment-baseline", "middle")
-
-// svg
-//     .append('rect')
-//     .style("fill", "none")
-//     .style("pointer-events", "all")
-//     .attr('width', width)
-//     .attr('height', height)
-//     .on('mouseover', mouseover)
-//     .on('mousemove', mousemove)
-//     .on('mouseout', mouseout);
-
-// Add cursor functionality
-// What happens when the mouse move -> show the annotations at the right positions.
-// function mouseover() {
-//         focus.style("opacity", 1)
-//         focusText.style("opacity",1)
-// }
-
 // Add cursor functionality
 const cursor = svg.append("line")
     .attr("class", "cursor")
-    .attr("x1", 1970)
-    .attr("x2", 2022)
+    .attr("x1", margin.left)
+    .attr("x2", width)
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
-    .attr("stroke", "red")
-    .attr("stroke-width", 1)
+    .attr("stroke", "grey")
+    .attr("stroke-width", 4)
     .style("display", "none");
 
-const annotation = svg.append("text")
+const annotation = svg
+    .append("text")
     .attr("class", "annotation")
     .attr("x", 10)
     .attr("y", 10)
@@ -269,33 +191,38 @@ const annotation = svg.append("text")
     .style("display", "none");
 svg.on("mousemove", function() {
         const [mouseX, mouseY] = d3.mouse(this);
-        cursor.attr("x1", mouseX)
-            .attr("x2", mouseX)
-            .style("display", "block")
-            .attr("stroke-width", 2)
-            .attr("stroke", "blue")
-        ;
+        console.log('mouseX: ' + mouseX)
+        if (0 <= mouseX <= 1074){
+                cursor.attr("x1", mouseX)
+                    .attr("x2", mouseX)
+                    .style("display", "block")
+                    .attr("stroke-width", 2)
+                ;
+        }
 
         // Find closest X index
         const xValue = x.invert(mouseX);
         const bisectIndex = bisect(data[0], xValue, 1);
-        const closestIndex = (bisectIndex >= data[0].length) ? data[0].length : bisectIndex;
+        const closestIndex = (bisectIndex >= data[0].length) ? data[0].length -1 : bisectIndex - 1;
 
         // Get the corresponding X value from the closest index
         const closestX = data[0][closestIndex].x;
 
-        // Do something with the closest X value
-        console.log("Closest X value:", closestX);
-
-        annotation.attr("x", mouseX + 5)
+        annotation
+            .attr("x", mouseX + 5)
             .attr("y", mouseY - 5)
-            .text(`year: ${closestX.toString()}, 
-            headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
-            energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
-            food: ${window.food_cpi_dict[closestX].toFixed(2)},
-            core: ${window.core_cpi_dict[closestX].toFixed(2)},
-            producer: ${window.producer_pi_dict[closestX].toFixed(2)}`)
-            .style("display", "block");
+            .text(`year: ${closestX.toString()},
+                headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
+                energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
+                food: ${window.food_cpi_dict[closestX].toFixed(2)},
+                core: ${window.core_cpi_dict[closestX].toFixed(2)},
+                producer: ${window.producer_pi_dict[closestX].toFixed(2)}`)
+            .attr("font-size", "12px")
+            .style("font-family", "Andale Mono")
+            .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 20})`)
+            .style("display", "block")
+            .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .style("top", (d3.mouse(this)[1]) + "px");
 });
 
 function mousemove() {
