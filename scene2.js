@@ -85,7 +85,7 @@ const legendData = [
 
 let selectedOption = "headline_cpi";
 console.log("Selected option:", selectedOption);
-const legendItems = svg.selectAll(".legend-item")
+let legendItems = svg.selectAll(".legend-item")
     .data(legendData)
     .enter()
     .append("g")
@@ -133,8 +133,13 @@ d3.select("#dropdown")
     .on("change", function() {
         selectedOption = d3.select(this).property("value");
         console.log("Selected option:", selectedOption);
-        svg.selectAll("circle").remove();
-        svg.selectAll("text").remove();
+        svg.selectAll(".legend-item").remove();
+        legendItems = svg.selectAll(".legend-item")
+            .data(legendData)
+            .enter()
+            .append("g")
+            .attr("class", "legend-item")
+            .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top})`);
         legendItems.append("circle")
             .attr("cx", 8)
             .attr("cy", 8)
