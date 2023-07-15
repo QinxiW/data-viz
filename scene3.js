@@ -23,7 +23,8 @@ const svg = d3.select("body")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
-
+let data = [window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
+    window.core_cpi[0], window.producer_pi[0]];
 // set x and y scale
 var x = d3.scaleLinear()
     .domain(cpi_keys)
@@ -112,8 +113,7 @@ const axisLabelsText =
 
 // preview before select dropdown
 svg.selectAll("rect")
-    .data([window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
-        window.core_cpi[0], window.producer_pi[0]])
+    .data(data)
     .enter()
     .append("rect")
     .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
@@ -127,6 +127,47 @@ svg.selectAll("rect")
 
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
+
+function updatePer(year_start, year_end) {
+//     todo
+    headline_endValue = window.headline_cpi_dict[year_end]
+    headline_startValue = window.headline_cpi_dict[year_start]
+    const headline_percentageDiff = ((headline_endValue - headline_startValue) / Math.abs(headline_startValue)) * 100;
+
+    // window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'
+    energy_endValue = window.energy_cpi_dict?.year_end ?? 0
+    energy_startValue = window.energy_cpi_dict?.year_start ?? 1
+    const energy_percentageDiff = ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100;
+
+    food_endValue = window.food_cpi_dict[year_end]
+    food_startValue = window.food_cpi_dict[year_start]
+    const food_percentageDiff = ((food_endValue - food_startValue) / Math.abs(food_startValue)) * 100;
+
+    core_endValue = window.core_cpi_dict[year_end]
+    core_startValue = window.core_cpi_dict[year_start]
+    const core_percentageDiff = ((core_endValue - core_startValue) / Math.abs(core_startValue)) * 100;
+
+    producer_endValue = window.producer_pi_dict[year_end]
+    producer_startValue = window.producer_pi_dict[year_start]
+    const producer_percentageDiff = ((producer_endValue - producer_startValue) / Math.abs(producer_startValue)) * 100;
+
+    data = [headline_percentageDiff, energy_percentageDiff, food_percentageDiff,
+        core_percentageDiff, producer_percentageDiff];
+    console.log('data: ' + data)
+
+    svg.selectAll("rect").remove();
+    svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("y", d => (d >= 0) ? y(d) : y(0))
+        .attr("x", (d,i) => i * 200 + 100)
+        .attr("width", xScale.bandwidth() * 5)
+        .transition()
+        .duration(1500)
+        .attr("height", d => Math.abs(y(d) - y(0)))
+        .attr("fill", "steelblue");
+}
 
 // What happens when the mouse move -> show the annotations at the right positions.
 function mousemove() {
@@ -165,6 +206,7 @@ d3.select("#slider")
         selectedOption = this.value;
         output.text(this.value);
         console.log("Selected option:", selectedOption);
+        updatePer(1970, selectedOption)
         // svg.selectAll(".legend-item").remove();
         // legendItems = svg.selectAll(".legend-item")
         //     .data(legendData)
