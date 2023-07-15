@@ -5,7 +5,6 @@ const data = [
         ...window.headline_cpi, ...window.energy_cpi, ...window.food_cpi,
         ...window.core_cpi, ...window.producer_pi
 ];
-// console.log(window.headline_cpi);
 console.log(data[0]);
 //     [
 //     {x: 0, y: 5},
@@ -17,31 +16,68 @@ console.log(data[0]);
 
 
 // Set the dimensions of the SVG container
-const width = 800;
-const height = 400;
+// const width = 800;
+// const height = 400;
+const margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 1200 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // Create the SVG container
+// const svg = d3.select("body")
+//     .append("svg")
+//     .attr("width", width)
+//     .attr("height", height);
+
 const svg = d3.select("body")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Define the scales for x and y axes
-const xScale =
-    d3.scaleLinear()
-    // .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
-    .domain([1970, 2022])
-    .range([0, width]);
+// const xScale =
+//     d3.scaleLinear()
+//     // .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
+//     .domain([1970, 2025])
+//     .range([0, width]);
+//
+// const yScale =
+//     d3.scaleLinear()
+//     .domain([-10, d3.max(data, d => d.y)]) // Adjust the domain according to your data
+//     .range([height, 0]);
 
-const yScale =
-    d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.y)]) // Adjust the domain according to your data
-    .range([height, 0]);
+var x = d3.scaleLinear()
+    .domain([1970, 2025])
+    .range([ 0, width ]);
+svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+// Add Y axis
+var y = d3.scaleLinear()
+    .domain([-10,30])
+    .range([ height, 0]);
+svg.append("g")
+    .call(d3.axisLeft(y));
 
 // Define the line function
 const line = d3.line()
-    .x(d => xScale(d.x))
-    .y(d => yScale(d.y));
+    .x(d => x(d.x))
+    .y(d => y(d.y));
+
+// Calculate y-coordinate for zero line
+const zeroY = y(0);
+
+// Append line element for zero line
+svg.append("line")
+    .attr("x1", 0)
+    .attr("y1", zeroY)
+    .attr("x2", width)
+    .attr("y2", zeroY)
+    .attr("stroke", "black")
+    .attr("stroke-width", 2)
+    .attr("stroke-dasharray", "5,5");
 
 // Append the line to the SVG container
 svg.append("path")
@@ -81,13 +117,3 @@ svg.append("path")
     .attr("stroke", "darkgreen")
     .attr("stroke-width", 2)
     .attr("d", line);
-
-
-// data.forEach((lineData, index) => {
-//         svg.append("path")
-//             .datum(lineData)
-//             .attr("fill", "none")
-//             .attr("stroke", "steelblue")
-//             .attr("stroke-width", 2)
-//             .attr("d", line);
-// });
