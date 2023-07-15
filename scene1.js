@@ -57,10 +57,50 @@ svg.append("line")
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "5,5");
 
+// tool tip
+var tooltip = d3.select("body")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")
+
+
+// A function that change this tooltip when the user hover a point.
+// Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+var mouseover = function(d) {
+        console.log('hi');
+        tooltip
+            .style("opacity", 1)
+}
+
+var mousemove = function(d) {
+        console.log(d);
+        tooltip
+            .html("The exact value of<br>the inflation for year is: " + d.y + d.x)
+            .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .style("top", (d3.mouse(this)[1]) + "px")
+}
+
+// A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+var mouseleave = function(d) {
+        // console.log(d);
+        tooltip
+            .transition()
+            .duration(200)
+            .style("opacity", 0)
+}
+
+
 // Graph line plot
 // Append the line to the SVG container
 svg.append("path")
     .datum(window.headline_cpi)
+    .transition()
+    .duration(1000)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 2)
@@ -68,6 +108,8 @@ svg.append("path")
 
 svg.append("path")
     .datum(window.energy_cpi)
+    .transition()
+    .duration(1200)
     .attr("fill", "none")
     .attr("stroke", "brown")
     .attr("stroke-width", 2)
@@ -75,6 +117,8 @@ svg.append("path")
 
 svg.append("path")
     .datum(window.food_cpi)
+    .transition()
+    .duration(1200)
     .attr("fill", "none")
     .attr("stroke", "purple")
     .attr("stroke-width", 2)
@@ -84,6 +128,8 @@ svg.append("path")
     .datum(window.core_cpi)
     .attr("fill", "none")
     .attr("stroke", "orange")
+    .transition()
+    .duration(1200)
     .attr("stroke-width", 2)
     .attr("d", line);
 
@@ -91,8 +137,13 @@ svg.append("path")
     .datum(window.producer_pi)
     .attr("fill", "none")
     .attr("stroke", "darkgreen")
+    .transition()
+    .duration(1200)
     .attr("stroke-width", 2)
-    .attr("d", line);
+    .attr("d", line)
+    .on("mouseover", mouseover )
+    .on("mousemove", mousemove )
+    .on("mouseleave", mouseleave );
 
 
 // shade above and below the zero line
