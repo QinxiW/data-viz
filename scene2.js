@@ -48,7 +48,7 @@ var x = d3.scaleLinear()
     .range([ 0, width ]);
 svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
 
 // Add Y axis
 var y = d3.scaleLinear()
