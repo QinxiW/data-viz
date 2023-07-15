@@ -150,10 +150,10 @@ svg.append("path")
     .attr("stroke-dashoffset", 0)
     .duration(2000)
     .attr("stroke-width", 2)
-    .attr("d", line)
-    .on("mouseover", mouseover )
-    .on("mousemove", mousemove )
-    .on("mouseleave", mouseleave );
+    .attr("d", line);
+    // .on("mouseover", mouseover )
+    // .on("mousemove", mousemove )
+    // .on("mouseleave", mouseleave );
 
 
 // shade above and below the zero line
