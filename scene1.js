@@ -217,7 +217,7 @@ svg.on("mousemove", function() {
         console.log('xValue: ' + xValue)
         if (closestX <= 1996){
                 annotation
-                    .attr("x", mouseX + 5)
+                    .attr("x", mouseX + 5)   //todo fix place
                     .attr("y", mouseY - 5)
                     .text(`year: ${closestX.toString()} | 
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
