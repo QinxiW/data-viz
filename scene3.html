@@ -8,8 +8,14 @@
     <!-- Include the js files for chart code for data helper functions.-->
     <script src="converted_data.js" charset="utf-8"></script>
     <!-- Include CSS -->
-    <link rel="stylesheet" href="style.css">
-
+    <style>
+        .slider {
+            width: 500px;
+        }
+        .slider input[type="range"] {
+            width: 100%;
+        }
+    </style>
 </head>
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
@@ -20,9 +26,12 @@
     <button onclick="location.href='index.html'" type="button">
         Restart</button>
     <p></p>
+    <div class="slider">
+        <input type="range" min="1970" max="2022" value="1970" step="1" id="slider" onchange="(this.value)">
+        <output id="value"></output>
+    </div>
 </div>
 <script src="scene3.js">
-    // <svg></svg>
 </script>
 </body>
 </html>
