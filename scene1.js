@@ -1,14 +1,12 @@
-// import { headline_cpi } from 'converted_data';
-//
 // overall line graph of 5 inflation group on year
 
 // Define the data for the line graph
-// const data = window.headline_cpi;
 const data = [
-        ...window.headline_cpi, ...window.energy_cpi
+        ...window.headline_cpi, ...window.energy_cpi, ...window.food_cpi,
+        ...window.core_cpi, ...window.producer_pi
 ];
-console.log(window.headline_cpi);
-console.log(data);
+// console.log(window.headline_cpi);
+console.log(data[0]);
 //     [
 //     {x: 0, y: 5},
 //     {x: 1, y: 10},
@@ -19,8 +17,8 @@ console.log(data);
 
 
 // Set the dimensions of the SVG container
-const width = 500;
-const height = 300;
+const width = 800;
+const height = 400;
 
 // Create the SVG container
 const svg = d3.select("body")
@@ -29,11 +27,14 @@ const svg = d3.select("body")
     .attr("height", height);
 
 // Define the scales for x and y axes
-const xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
+const xScale =
+    d3.scaleLinear()
+    // .domain([0, d3.max(data, d => d.x)]) // Adjust the domain according to your data
+    .domain([1970, 2022])
     .range([0, width]);
 
-const yScale = d3.scaleLinear()
+const yScale =
+    d3.scaleLinear()
     .domain([0, d3.max(data, d => d.y)]) // Adjust the domain according to your data
     .range([height, 0]);
 
@@ -44,17 +45,49 @@ const line = d3.line()
 
 // Append the line to the SVG container
 svg.append("path")
-    .datum(data)
+    .datum(window.headline_cpi)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 2)
     .attr("d", line);
 
-data.forEach((lineData, index) => {
-    svg.append("path")
-        .datum(lineData)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("d", line);
-});
+svg.append("path")
+    .datum(window.energy_cpi)
+    .attr("fill", "none")
+    .attr("stroke", "brown")
+    .attr("stroke-width", 2)
+    .attr("d", line);
+
+
+svg.append("path")
+    .datum(window.food_cpi)
+    .attr("fill", "none")
+    .attr("stroke", "purple")
+    .attr("stroke-width", 2)
+    .attr("d", line);
+
+
+svg.append("path")
+    .datum(window.core_cpi)
+    .attr("fill", "none")
+    .attr("stroke", "orange")
+    .attr("stroke-width", 2)
+    .attr("d", line);
+
+
+svg.append("path")
+    .datum(window.producer_pi)
+    .attr("fill", "none")
+    .attr("stroke", "darkgreen")
+    .attr("stroke-width", 2)
+    .attr("d", line);
+
+
+// data.forEach((lineData, index) => {
+//         svg.append("path")
+//             .datum(lineData)
+//             .attr("fill", "none")
+//             .attr("stroke", "steelblue")
+//             .attr("stroke-width", 2)
+//             .attr("d", line);
+// });
