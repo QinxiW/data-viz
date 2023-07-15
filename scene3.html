@@ -6,20 +6,24 @@
     <!-- meta data-->
     <meta charset="UTF-8" />
     <!-- Include the js files for chart code for data helper functions.-->
-    <script src="data/data_reader.js" charset="utf-8"></script>
     <script src="converted_data.js" charset="utf-8"></script>
     <!-- Include CSS -->
     <link rel="stylesheet" href="style.css">
+
 </head>
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
 <div id="app">
-    <h3>Hello Scene 1</h3>
+    <h3>Hello Scene 3</h3>
     <button onclick="location.href='/scene2.html'" type="button">
-        Next</button>
-<!--    <svg width="1000" height="1000"></svg>-->
+        Prev</button>
+    <select id="dropdown"></select>
+    <button onclick="location.href='/scene1.html'" type="button">
+        Restart</button>
     <p></p>
 </div>
-<script src="scene1.js"></script>
+<script src="scene3.js">
+    // <svg></svg>
+</script>
 </body>
 </html>

@@ -52,7 +52,38 @@ svg.append("g")
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([6,12])
+    .domain([-6,20])
     .range([ height, 0]);
 svg.append("g")
     .call(d3.axisLeft(y));
+
+
+xdomain = [0,1];
+xrange = [0,2.380953];
+ydomain = [0,1];
+yrange = [100,130];
+cdomain = [0, 42];
+crange = ["blue", "orange"];
+xs = d3.scaleLinear().domain(xdomain).range(xrange);
+ys = d3.scaleLinear().domain(ydomain).range(yrange);
+cs = d3.scaleLinear().domain(cdomain).range(crange);
+const xScale = d3.scaleBand().domain([0,1,2,3,4,5]).range([0, 200]);
+d3.select("#dropdown")
+    .on("change", function() {
+        const selectedOption = d3.select(this).property("value");
+        console.log("Selected option:", selectedOption);
+
+        if(selectedOption=='energy_cpi'){
+            d3.select('svg')
+                .append("g")
+                .attr("transform", "translate(50,50)")
+                .selectAll("rect")
+                .data(window.energy_cpi)
+                .enter()
+                .append("rect")
+                .attr("x", (d, i) => i*xScale.bandwidth())
+                .attr("y", (d, i) => y[i] )
+                .attr("width", xScale.bandwidth())
+                .attr("height", (d, i) => i);
+        }
+    });
