@@ -7,7 +7,7 @@ const data = [
 ];
 
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
+const margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -75,9 +75,44 @@ svg.append("line")
     .attr("stroke-dasharray", "5,5");
 
 
+const legendData = [
+    { label: "headline_cpi", color: "steelblue" },
+    { label: "energy_cpi", color: "brown" },
+    { label: "food_cpi", color: "purple" },
+    { label: "core_cpi", color: "orange" },
+    { label: "producer_pi", color: "darkgreen" }
+];
+
+let selectedOption = "headline_cpi";
+console.log("Selected option:", selectedOption);
+const legendItems = svg.selectAll(".legend-item")
+    .data(legendData)
+    .enter()
+    .append("g")
+    .attr("class", "legend-item")
+    .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top})`);
+
+// Draw color dots
+legendItems.append("circle")
+    .attr("cx", 8)
+    .attr("cy", 8)
+    .attr("r", 8)
+    .attr("fill", d => d.color)
+    .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
+
+// Add labels
+legendItems.append("text")
+    .attr("x", 20)
+    .attr("y", 12)
+    .text(d => d.label)
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
+    .attr("alignment-baseline", "middle")
+    .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
+
 const xScale = d3.scaleBand()
     .domain(window.headline_cpi.map(d => d.x))
-    .range([margin.left, width - margin.right])
+    .range([0, width - margin.right])
     .padding(0.1);
 
 // preview before select dropdown
@@ -94,11 +129,26 @@ svg.selectAll("rect")
     // .attr("height", d => height - margin.bottom - y(d.y))
     .attr("fill", "steelblue");
 
-
 d3.select("#dropdown")
     .on("change", function() {
-        const selectedOption = d3.select(this).property("value");
+        selectedOption = d3.select(this).property("value");
         console.log("Selected option:", selectedOption);
+        svg.selectAll("circle").remove();
+        svg.selectAll("text").remove();
+        legendItems.append("circle")
+            .attr("cx", 8)
+            .attr("cy", 8)
+            .attr("r", 8)
+            .attr("fill", d => d.color)
+            .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
+        legendItems.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .text(d => d.label)
+            .attr("font-size", "12px")
+            .style("font-family", "Andale Mono")
+            .attr("alignment-baseline", "middle")
+            .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
 
         if(selectedOption === 'energy_cpi'){
             svg.selectAll("rect").remove();

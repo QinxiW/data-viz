@@ -18,7 +18,7 @@ console.log(data[0]);
 // Set the dimensions of the SVG container
 // const width = 800;
 // const height = 400;
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
+const margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -161,7 +161,7 @@ const legendItems = svg.selectAll(".legend-item")
 legendItems.append("circle")
     .attr("cx", 8)
     .attr("cy", 8)
-    .attr("r", 6)
+    .attr("r", 8)
     .attr("fill", d => d.color);
 
 // Add labels
@@ -170,4 +170,5 @@ legendItems.append("text")
     .attr("y", 12)
     .text(d => d.label)
     .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
     .attr("alignment-baseline", "middle");
