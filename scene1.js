@@ -117,3 +117,57 @@ svg.append("path")
     .attr("stroke", "darkgreen")
     .attr("stroke-width", 2)
     .attr("d", line);
+
+const areaBelow = d3.area()
+    .x(d => x(d.x))
+    .y0(d => zeroY)
+    .y1(height - margin.bottom); // Lower boundary of the area
+
+const areaAbove = d3.area()
+    .x(d => x(d.x))
+    .y0(d => zeroY)
+    .y1(margin.top); // Upper boundary of the area
+
+// // Draw the areas
+svg.append("path")
+    .datum(data)
+    .attr("fill", "lightgreen")
+    .attr("fill-opacity", 0.1)
+    .attr("d", areaAbove);
+
+svg.append("path")
+    .datum(data)
+    .attr("fill", "lightpink")
+    .attr("fill-opacity", 0.1)
+    .attr("d", areaBelow);
+
+
+const legendData = [
+        { label: "headline_cpi", color: "steelblue" },
+        { label: "energy_cpi", color: "brown" },
+        { label: "food_cpi", color: "purple" },
+        { label: "core_cpi", color: "orange" },
+        { label: "producer_pi", color: "darkgreen" }
+];
+
+const legendItems = svg.selectAll(".legend-item")
+    .data(legendData)
+    .enter()
+    .append("g")
+    .attr("class", "legend-item")
+    .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 20})`);
+
+// Draw color dots
+legendItems.append("circle")
+    .attr("cx", 8)
+    .attr("cy", 8)
+    .attr("r", 6)
+    .attr("fill", d => d.color);
+
+// Add labels
+legendItems.append("text")
+    .attr("x", 20)
+    .attr("y", 12)
+    .text(d => d.label)
+    .attr("font-size", "12px")
+    .attr("alignment-baseline", "middle");

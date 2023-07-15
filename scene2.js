@@ -8,8 +8,8 @@ const data = [
 
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 1400 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1200 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("body")
@@ -44,7 +44,7 @@ d3.select("#dropdown")
 
 
 var x = d3.scaleLinear()
-    .domain([1970,2022])
+    .domain([1970,2025])
     .range([ 0, width ]);
 svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -52,18 +52,20 @@ svg.append("g")
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([-10,20])
+    .domain([-10,30])
     .range([ height, 0]);
 svg.append("g")
     .call(d3.axisLeft(y));
 
-const xScale = d3.scaleBand().domain([0,1,2,3,4,5]).range([0, 200]);
+const line = d3.line()
+    .x(d => x(d.x))
+    .y(d => y(d.y));
 d3.select("#dropdown")
     .on("change", function() {
         const selectedOption = d3.select(this).property("value");
         console.log("Selected option:", selectedOption);
 
-        if(selectedOption=='energy_cpi'){
+        if(selectedOption === 'energy_cpi'){
             // d3.select('svg')
             //     .append("g")
             //     .attr("transform", "translate(50,50)")
@@ -79,6 +81,34 @@ d3.select("#dropdown")
                 .datum(window.energy_cpi)
                 .attr("fill", "none")
                 .attr("stroke", "brown")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+        } else if (selectedOption === 'headline_cpi') {
+            svg.append("path")
+                .datum(window.headline_cpi)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+        } else if (selectedOption === 'core_cpi') {
+            svg.append("path")
+                .datum(window.core_cpi)
+                .attr("fill", "orange")
+                .attr("stroke", "orange")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+        } else if (selectedOption === 'food_cpi') {
+            svg.append("path")
+                .datum(window.food_cpi)
+                .attr("fill", "purple")
+                .attr("stroke", "purple")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+        } else if (selectedOption === 'producer_pi') {
+            svg.append("path")
+                .datum(window.producer_pi)
+                .attr("fill", "darkgreen")
+                .attr("stroke", "darkgreen")
                 .attr("stroke-width", 2)
                 .attr("d", line);
         }
