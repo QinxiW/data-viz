@@ -2,10 +2,10 @@
 
 // Define the data for the line graph
 const data = [
-        ...window.headline_cpi, ...window.energy_cpi, ...window.food_cpi,
-        ...window.core_cpi, ...window.producer_pi
+        [...window.headline_cpi], [...window.energy_cpi], [...window.food_cpi],
+        [...window.core_cpi], [...window.producer_pi]
 ];
-console.log(data[0]);
+console.log(data);
 //     [{x: 0, y: 5},
 //     {x: 1, y: 10},
 //     {x: 2, y: 8},
@@ -86,13 +86,13 @@ svg.append("line")
 // }
 
 // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-var mouseleave = function(d) {
-        // console.log(d);
-        tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 0)
-}
+// var mouseleave = function(d) {
+//         // console.log(d);
+//         tooltip
+//             .transition()
+//             .duration(200)
+//             .style("opacity", 0)
+// }
 
 
 // Graph line plot
@@ -212,58 +212,118 @@ legendItems.append("text")
     .style("font-family", "Andale Mono")
     .attr("alignment-baseline", "middle");
 
-// test curser
+
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
 
-// Create the circle that travels along the curve of chart
-var focus = svg
-    .append('g')
-    .append('circle')
-    .style("fill", "none")
-    .attr("stroke", "black")
-    .attr('r', 8.5)
-    .style("opacity", 0)
+// // Create the circle that travels along the curve of chart
+// var focus = svg
+//     .append('g')
+//     .append('circle')
+//     .style("fill", "none")
+//     .attr("stroke", "black")
+//     .attr('r', 8.5)
+//     .style("opacity", 0)
 
 // Create the text that travels along the curve of chart
-var focusText = svg
-    .append('g')
-    .append('text')
-    .style("opacity", 0)
-    .attr("text-anchor", "left")
-    .attr("alignment-baseline", "middle")
+// var focusText = svg
+//     .append('g')
+//     .append('text')
+//     .style("opacity", 0)
+//     .attr("text-anchor", "left")
+//     .attr("alignment-baseline", "middle")
 
-svg
-    .append('rect')
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .attr('width', width)
-    .attr('height', height)
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseout', mouseout);
+// svg
+//     .append('rect')
+//     .style("fill", "none")
+//     .style("pointer-events", "all")
+//     .attr('width', width)
+//     .attr('height', height)
+//     .on('mouseover', mouseover)
+//     .on('mousemove', mousemove)
+//     .on('mouseout', mouseout);
 
-
+// Add cursor functionality
 // What happens when the mouse move -> show the annotations at the right positions.
-function mouseover() {
-        focus.style("opacity", 1)
-        focusText.style("opacity",1)
-}
+// function mouseover() {
+//         focus.style("opacity", 1)
+//         focusText.style("opacity",1)
+// }
+
+// Add cursor functionality
+const cursor = svg.append("line")
+    .attr("class", "cursor")
+    .attr("x1", 1970)
+    .attr("x2", 2022)
+    .attr("y1", margin.top)
+    .attr("y2", height - margin.bottom)
+    .attr("stroke", "red")
+    .attr("stroke-width", 1)
+    .style("display", "none");
+
+const annotation = svg.append("text")
+    .attr("class", "annotation")
+    .attr("x", 10)
+    .attr("y", 10)
+    .attr("fill", "black")
+    .style("display", "none");
+svg.on("mousemove", function() {
+        const [mouseX, mouseY] = d3.mouse(this);
+        cursor.attr("x1", mouseX)
+            .attr("x2", mouseX)
+            .style("display", "block")
+            .attr("stroke-width", 2)
+            .attr("stroke", "blue")
+        ;
+
+        // Find closest X index
+        const xValue = x.invert(mouseX);
+        const bisectIndex = bisect(data[0], xValue, 1);
+        const closestIndex = (bisectIndex >= data[0].length) ? data[0].length : bisectIndex;
+
+        // Get the corresponding X value from the closest index
+        const closestX = data[0][closestIndex].x;
+
+        // Do something with the closest X value
+        console.log("Closest X value:", closestX);
+
+        annotation.attr("x", mouseX + 5)
+            .attr("y", mouseY - 5)
+            .text(`year: ${closestX.toString()}, 
+            headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
+            energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
+            food: ${window.food_cpi_dict[closestX].toFixed(2)},
+            core: ${window.core_cpi_dict[closestX].toFixed(2)},
+            producer: ${window.producer_pi_dict[closestX].toFixed(2)}`)
+            .style("display", "block");
+});
 
 function mousemove() {
-        // recover coordinate we need
-        var x0 = x.invert(d3.mouse(this)[0]);
-        var i = bisect(data, x0, 1);
-        let selectedData = data[i]
-        focus
-            .attr("cx", x(selectedData.x))
-            .attr("cy", y(selectedData.y))
-        focusText
-            .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
-            .attr("x", x(selectedData.x)+15)
-            .attr("y", y(selectedData.y))
+        const [mouseX, mouseY] = d3.mouse(this);
+        const xValue = x.invert(mouseX);
+        const yValue = y.invert(mouseY);
+        // console.log('xValue: ' + xValue + 'yValue: ' + yValue);
+        // const closest = data.map((line) => {
+        //         const closestPointIndex = d3.scan(line, (a, b) => {
+        //                 const distanceA = Math.sqrt((a.x - xValue) ** 2 + (a.y - yValue) ** 2);
+        //                 const distanceB = Math.sqrt((b.x - xValue) ** 2 + (b.y - yValue) ** 2);
+        //                 // console.log('distanceA: ' + distanceA);
+        //                 // console.log('distanceB: ' + distanceB);
+        //                 return distanceA - distanceB;
+        //         });
+        //         // console.log('closestPointIndex: ' + closestPointIndex);
+        //         // console.log(line);
+        //         return line[closestPointIndex];
+        // });
+        // focus.style("opacity", 1)
+        // focusText.style("opacity",1)
+
+        // focusText
+        //     .html("type: "+ cptype + "year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
+        //     .attr("x", x(selectedData.x)+15)
+        //     .attr("y", y(selectedData.y))
 }
 function mouseout() {
         focus.style("opacity", 0)
-        focusText.style("opacity", 0)
+        // focusText.style("opacity", 0)
 }
