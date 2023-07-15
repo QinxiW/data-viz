@@ -192,37 +192,61 @@ const annotation = svg
 svg.on("mousemove", function() {
         const [mouseX, mouseY] = d3.mouse(this);
         console.log('mouseX: ' + mouseX)
-        if (0 <= mouseX <= 1074){
+
+        // Find closest X index
+        const xValue = x.invert(mouseX);
+
+        if (1970 < xValue < 2022){
                 cursor.attr("x1", mouseX)
                     .attr("x2", mouseX)
                     .style("display", "block")
                     .attr("stroke-width", 2)
                 ;
+        } else {
+                cursor.attr("x1", mouseX)
+                    .attr("x2", mouseX)
+                    .style("display", "none")
+                    .attr("stroke-width", 2)
+                ;
         }
-
-        // Find closest X index
-        const xValue = x.invert(mouseX);
         const bisectIndex = bisect(data[0], xValue, 1);
         const closestIndex = (bisectIndex >= data[0].length) ? data[0].length -1 : bisectIndex - 1;
 
         // Get the corresponding X value from the closest index
         const closestX = data[0][closestIndex].x;
-
-        annotation
-            .attr("x", mouseX + 5)
-            .attr("y", mouseY - 5)
-            .text(`year: ${closestX.toString()},
+        console.log('xValue: ' + xValue)
+        if (closestX <= 1996){
+                annotation
+                    .attr("x", mouseX + 5)
+                    .attr("y", mouseY - 5)
+                    .text(`year: ${closestX.toString()},
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
                 energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
                 food: ${window.food_cpi_dict[closestX].toFixed(2)},
                 core: ${window.core_cpi_dict[closestX].toFixed(2)},
                 producer: ${window.producer_pi_dict[closestX].toFixed(2)}`)
-            .attr("font-size", "12px")
-            .style("font-family", "Andale Mono")
-            .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 20})`)
-            .style("display", "block")
-            .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-            .style("top", (d3.mouse(this)[1]) + "px");
+                    .attr("text-anchor", "start")
+                    .attr("font-size", "12px")
+                    .style("font-family", "Andale Mono")
+                    .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 10})`)
+                    .style("display", "block");
+        } else if (xValue <= 2022) {
+                annotation
+                    .attr("x", mouseX + 5)
+                    .attr("y", mouseY - 5)
+                    .text(`year: ${closestX.toString()},
+                headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
+                energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
+                food: ${window.food_cpi_dict[closestX].toFixed(2)},
+                core: ${window.core_cpi_dict[closestX].toFixed(2)},
+                producer: ${window.producer_pi_dict[closestX].toFixed(2)}`)
+                    .attr("text-anchor", "end")
+                    .attr("font-size", "12px")
+                    .style("font-family", "Andale Mono")
+                    .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 10})`)
+                    .style("display", "block");
+        }
+
 });
 
 function mousemove() {
