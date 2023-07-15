@@ -58,32 +58,32 @@ svg.append("line")
     .attr("stroke-dasharray", "5,5");
 
 // tool tip
-var tooltip = d3.select("body")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px")
-
-
-// A function that change this tooltip when the user hover a point.
-// Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-var mouseover = function(d) {
-        console.log('hi');
-        tooltip
-            .style("opacity", 1)
-}
-
-var mousemove = function(d) {
-        console.log(d);
-        tooltip
-            .html("The exact value of<br>the inflation for year is: " + d.y + d.x)
-            .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-            .style("top", (d3.mouse(this)[1]) + "px")
-}
+// var tooltip = d3.select("body")
+//     .append("div")
+//     .style("opacity", 0)
+//     .attr("class", "tooltip")
+//     .style("background-color", "white")
+//     .style("border", "solid")
+//     .style("border-width", "1px")
+//     .style("border-radius", "5px")
+//     .style("padding", "10px")
+//
+//
+// // A function that change this tooltip when the user hover a point.
+// // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+// var mouseover = function(d) {
+//         console.log('hi');
+//         tooltip
+//             .style("opacity", 1)
+// }
+//
+// var mousemove = function(d) {
+//         console.log(d);
+//         tooltip
+//             .html("The exact value of<br>the inflation for year is: " + d.y + d.x)
+//             .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+//             .style("top", (d3.mouse(this)[1]) + "px")
+// }
 
 // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
 var mouseleave = function(d) {
@@ -211,3 +211,59 @@ legendItems.append("text")
     .attr("font-size", "12px")
     .style("font-family", "Andale Mono")
     .attr("alignment-baseline", "middle");
+
+// test curser
+// This allows to find the closest X index of the mouse:
+var bisect = d3.bisector(function(d) { return d.x; }).left;
+
+// Create the circle that travels along the curve of chart
+var focus = svg
+    .append('g')
+    .append('circle')
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 8.5)
+    .style("opacity", 0)
+
+// Create the text that travels along the curve of chart
+var focusText = svg
+    .append('g')
+    .append('text')
+    .style("opacity", 0)
+    .attr("text-anchor", "left")
+    .attr("alignment-baseline", "middle")
+
+svg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width)
+    .attr('height', height)
+    .on('mouseover', mouseover)
+    .on('mousemove', mousemove)
+    .on('mouseout', mouseout);
+
+
+// What happens when the mouse move -> show the annotations at the right positions.
+function mouseover() {
+        focus.style("opacity", 1)
+        focusText.style("opacity",1)
+}
+
+function mousemove() {
+        // recover coordinate we need
+        var x0 = x.invert(d3.mouse(this)[0]);
+        var i = bisect(data, x0, 1);
+        let selectedData = data[i]
+        focus
+            .attr("cx", x(selectedData.x))
+            .attr("cy", y(selectedData.y))
+        focusText
+            .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
+            .attr("x", x(selectedData.x)+15)
+            .attr("y", y(selectedData.y))
+}
+function mouseout() {
+        focus.style("opacity", 0)
+        focusText.style("opacity", 0)
+}
