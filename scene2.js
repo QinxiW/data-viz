@@ -115,6 +115,81 @@ svg.selectAll("rect")
     // .attr("height", d => height - margin.bottom - y(d.y))
     .attr("fill", "steelblue");
 
+
+// test curser
+// This allows to find the closest X index of the mouse:
+var bisect = d3.bisector(function(d) { return d.x; }).left;
+
+// Create the circle that travels along the curve of chart
+var focus = svg
+    .append('g')
+    .append('circle')
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 8.5)
+    .style("opacity", 0)
+
+// Create the text that travels along the curve of chart
+var focusText = svg
+    .append('g')
+    .append('text')
+    .style("opacity", 0)
+    .attr("text-anchor", "left")
+    .attr("alignment-baseline", "middle")
+
+svg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width)
+    .attr('height', height)
+    .on('mouseover', mouseover)
+    .on('mousemove', mousemove)
+    .on('mouseout', mouseout);
+
+
+// What happens when the mouse move -> show the annotations at the right positions.
+function mouseover() {
+    focus.style("opacity", 1)
+    focusText.style("opacity",1)
+}
+
+function mousemove() {
+    let data;
+    console.log('selectedOption in mouse' + selectedOption);
+    if (selectedOption === "headline_cpi"){
+        data = window.headline_cpi;
+    } else if (selectedOption === "energy_cpi"){
+        data = window.energy_cpi;
+    } else if (selectedOption === "food_cpi"){
+        data = window.food_cpi;
+    } else if (selectedOption === "core_cpi"){
+        data = window.core_cpi;
+    } else if (selectedOption === "producer_pi"){
+        data = window.producer_pi;
+    }
+    // recover coordinate we need
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect(data, x0, 1);
+    let selectedData = data[i-1];
+    focus
+        .attr("cx", x(selectedData.x)+12)
+        .attr("cy", y(selectedData.y));
+        // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
+    focusText
+        .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
+        .attr("x", x(selectedData.x)+10)
+        .attr("y", y(selectedData.y))
+        .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+        .style("top", (d3.mouse(this)[1])+100 + "px");
+}
+function mouseout() {
+    focus.style("opacity", 0)
+    focusText.style("opacity", 0)
+}
+
+
+// dropdown update
 d3.select("#dropdown")
     .on("change", function() {
         selectedOption = d3.select(this).property("value");
@@ -141,8 +216,8 @@ d3.select("#dropdown")
             .attr("alignment-baseline", "middle")
             .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
 
+        svg.selectAll("rect").remove();
         if(selectedOption === 'energy_cpi'){
-            svg.selectAll("rect").remove();
             // Draw the bars
             svg.selectAll("rect")
                 .data(window.energy_cpi)
@@ -156,7 +231,7 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "brown");
         } else if (selectedOption === 'headline_cpi') {
-            svg.selectAll("rect").remove();
+            // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.headline_cpi)
                 .enter()
@@ -169,7 +244,7 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "steelblue");
         } else if (selectedOption === 'core_cpi') {
-            svg.selectAll("rect").remove();
+            // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.core_cpi)
                 .enter()
@@ -182,7 +257,7 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "orange");
         } else if (selectedOption === 'food_cpi') {
-            svg.selectAll("rect").remove();
+            // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.food_cpi)
                 .enter()
@@ -195,7 +270,7 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "purple");
         } else if (selectedOption === 'producer_pi') {
-            svg.selectAll("rect").remove();
+            // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.producer_pi)
                 .enter()
@@ -208,4 +283,15 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "darkgreen");
         }
+
+        svg
+            .append('rect')
+            .style("fill", "none")
+            .style("pointer-events", "all")
+            .attr('width', width)
+            .attr('height', height)
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseout', mouseout);
+
     });

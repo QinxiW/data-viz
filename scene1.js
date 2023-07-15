@@ -219,7 +219,7 @@ svg.on("mousemove", function() {
                 annotation
                     .attr("x", mouseX + 5)
                     .attr("y", mouseY - 5)
-                    .text(`year: ${closestX.toString()},
+                    .text(`year: ${closestX.toString()} | 
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
                 energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
                 food: ${window.food_cpi_dict[closestX].toFixed(2)},
@@ -234,7 +234,7 @@ svg.on("mousemove", function() {
                 annotation
                     .attr("x", mouseX + 5)
                     .attr("y", mouseY - 5)
-                    .text(`year: ${closestX.toString()},
+                    .text(`year ${closestX.toString()} | 
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
                 energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
                 food: ${window.food_cpi_dict[closestX].toFixed(2)},
