@@ -30,8 +30,56 @@ const svg = d3.select("body")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
-let data = [window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
-    window.core_cpi[0], window.producer_pi[0]];
+
+let selectedStartYear = this.slider.value ? this.slider.value : 1970;
+let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
+// default init
+output.text(selectedStartYear);
+output2.text(selectedEndYear);
+
+// dropdown update
+d3.select("#slider")
+    .on("input", function() {
+        selectedStartYear = this.value;
+        output.text(this.value);
+        console.log("selectedStartYear:", selectedStartYear);
+        updatePer(selectedStartYear, selectedEndYear);
+    });
+
+d3.select("#slider2")
+    .on("input", function() {
+        selectedEndYear = this.value;
+        output2.text(this.value);
+        console.log("selectedEndYear:", selectedEndYear);
+        updatePer(selectedStartYear, selectedEndYear);
+    });
+
+let headline_endValue = window.headline_cpi_dict[selectedEndYear]
+let headline_startValue = window.headline_cpi_dict[selectedStartYear]
+const headline_percentageDiff = ((headline_endValue - headline_startValue) / Math.abs(headline_startValue)) * 100;
+
+// window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'
+let energy_endValue = window.energy_cpi_dict?.selectedEndYear ?? 0
+let energy_startValue = window.energy_cpi_dict?.selectedStartYear ?? 1
+const energy_percentageDiff = energy_endValue !== 0 ? ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100 : 0;
+
+let food_endValue = window.food_cpi_dict[selectedEndYear]
+let food_startValue = window.food_cpi_dict[selectedStartYear]
+const food_percentageDiff = ((food_endValue - food_startValue) / Math.abs(food_startValue)) * 100;
+
+let core_endValue = window.core_cpi_dict[selectedEndYear]
+let core_startValue = window.core_cpi_dict[selectedStartYear]
+const core_percentageDiff = ((core_endValue - core_startValue) / Math.abs(core_startValue)) * 100;
+
+let producer_endValue = window.producer_pi_dict[selectedEndYear]
+let producer_startValue = window.producer_pi_dict[selectedStartYear]
+const producer_percentageDiff = ((producer_endValue - producer_startValue) / Math.abs(producer_startValue)) * 100;
+
+let data = [headline_percentageDiff, energy_percentageDiff, food_percentageDiff,
+    core_percentageDiff, producer_percentageDiff];
+console.log(data);
+// let data = [window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
+//     window.core_cpi[0], window.producer_pi[0]];
 // set x and y scale
 var x = d3.scaleLinear()
     .domain(cpi_keys)
@@ -139,52 +187,6 @@ const axisLabelsText =
     .text(d => d)
     .style("font-size", "24px");
 
-// preview before select dropdown
-svg.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-    .attr("x", (d,i) => i * 200 + 100)
-    .attr("width", xScale.bandwidth() * 5)
-    .transition()
-    .duration(1500)
-    .attr("height", d => Math.abs(y(d.y) - y(0)))
-    .attr("fill", (d,i) => legendData[i].color);
-svg.selectAll("rect").on("mouseover", function (event, d) {
-    console.log(d);
-    const tooltip = d3.select("#app")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("background-color", "pink")
-        .style("padding", "5px")
-        .style("border", "1px solid #ccc")
-        .style("border-radius", "5px")
-        .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
-        .style("left", `${event.pageX}px`)
-        .style("top", `${event.pageY - 50}px`);
-    tooltip.html(`Value: ${data[d].y}, Inflation type: ${cpi_keys[d]}`);
-})
-.on("mouseout", function () {
-    d3.selectAll(".tooltip").remove();
-});
-
-// Append text labels on top of the bars
-svg.selectAll(".bar-label")
-    .data(data)
-    .enter()
-    .append("text")
-    .attr("class", "bar-label")
-    .attr("y", d => (d >= 0) ? y(d) : y(0))
-    .attr("x", (d,i) => i * 200 + 100)
-    .attr("text-anchor", "middle") // Center the text horizontally
-    .text(d => d.y)
-    .style("font-size", "12px")
-    .style("fill", "red");
-
-// This allows to find the closest X index of the mouse:
-var bisect = d3.bisector(function(d) { return d.x; }).left;
 
 function updatePer(year_start, year_end) {
 
@@ -222,25 +224,24 @@ function updatePer(year_start, year_end) {
         .attr("x", (d,i) => i * 200 + 100)
         .attr("width", xScale.bandwidth() * 5)
         .transition()
-        .duration(1500)
+        .duration(800)
         .attr("height", d => Math.abs(y(d) - y(0)))
         .attr("fill", (d,i) => legendData[i].color);
 
     // Append text labels on top of the bars
-    svg.selectAll(".bar-label")
-        .data(data)
-        .enter()
-        .append("text")
-        .attr("class", "bar-label")
-        .attr("y", d => (d >= 0) ? y(d) : y(0))
-        .attr("x", (d,i) => i * 200 + 100)
-        .attr("text-anchor", "middle") // Center the text horizontally
-        .text(d => d)
-        .style("font-size", "12px")
-        .style("fill", "red");
+    // svg.selectAll(".bar-label")
+    //     .data(data)
+    //     .enter()
+    //     .append("text")
+    //     .attr("class", "bar-label")
+    //     .attr("y", d => (d >= 0) ? y(d) : y(0))
+    //     .attr("x", (d,i) => i * 200 + 100)
+    //     .attr("text-anchor", "middle") // Center the text horizontally
+    //     .text(d => d)
+    //     .style("font-size", "12px")
+    //     .style("fill", "red");
 
     svg.selectAll("rect").on("mouseover", function (event, d) {
-        console.log(d);
         const tooltip = d3.select("#app")
             .append("div")
             .attr("class", "tooltip")
@@ -250,9 +251,10 @@ function updatePer(year_start, year_end) {
             .style("border", "1px solid #ccc")
             .style("border-radius", "5px")
             .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
-            .style("left", `${event.pageX}px`)
-            .style("top", `${event.pageY - 50}px`);
-        tooltip.html(`Value: ${data[d].toFixed(2)}, Inflation type: ${cpi_keys[d]}`);
+            .style("left", `${d3.event.pageX}px`)
+            .style("top", `${d3.event.pageY - 50}px`);
+        tooltip.html(`Value: ${data[d].toFixed(2)}, 
+            Inflation type: ${cpi_keys[d]}, Year: ${year_start} - ${year_end}`);
     })
         .on("mouseout", function () {
             d3.selectAll(".tooltip").remove();
@@ -288,76 +290,46 @@ function updatePer(year_start, year_end) {
 //         .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
 //         .style("top", (d3.mouse(this)[1])+100 + "px");
 // }
-
-let selectedStartYear = this.slider.value ? this.slider.value : 1970;
-let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
-// default init
-output.text(selectedStartYear);
-output2.text(selectedEndYear);
-
-// dropdown update
-d3.select("#slider")
-    .on("input", function() {
-        selectedStartYear = this.value;
-        output.text(this.value);
-        console.log("selectedStartYear:", selectedStartYear);
-        updatePer(selectedStartYear, selectedEndYear);
+// preview before select dropdown
+svg.selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("y", d => (d >= 0) ? y(d) : y(0))
+    .attr("x", (d,i) => i * 200 + 100)
+    .attr("width", xScale.bandwidth() * 5)
+    .transition()
+    .duration(1500)
+    .attr("height", d => Math.abs(y(d) - y(0)))
+    .attr("fill", (d,i) => legendData[i].color);
+svg.selectAll("rect").on("mouseover", function (event, d) {
+    const tooltip = d3.select("#app")
+        .append("div")
+        .attr("class", "tooltip")
+        .attr("x", 1000)
+        .style("position", "fixed")
+        .style("background-color", "pink")
+        .style("padding", "15px")
+        .style("border", "1px solid #ccc")
+        .style("border-radius", "15px")
+        .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
+        .style("left", `${d3.event.pageX}px`)
+        .style("top", `${d3.event.pageY - 50}px`);
+    tooltip.html(`Value: ${data[d]}, Inflation type: ${cpi_keys[d]}, Year: ${selectedStartYear} - ${selectedEndYear}`);
+})
+    .on("mouseout", function () {
+        d3.selectAll(".tooltip").remove();
     });
 
-d3.select("#slider2")
-    .on("input", function() {
-        selectedEndYear = this.value;
-        output2.text(this.value);
-        console.log("selectedEndYear:", selectedEndYear);
-        updatePer(selectedStartYear, selectedEndYear);
-    });
-
-// // Add tooltip
-// var divToolTip = d3.select('body')
-//     .append('div')
-//     .attr('id', 'tooltip')
-//     .style('opacity', 0);
-
-// svg.selectAll('rect')
+// Append text labels on top of the bars
+// svg.selectAll(".bar-label")
 //     .data(data)
 //     .enter()
-//     .append('g')
-//     .attr('id', (d, i) => `bar_${d.key}`)
-//     .on('mouseenter', (node, i) => {
-//         divToolTip.style("opacity", 1).style('z-index', 10);
-//         divToolTip.html(`<b>Hour of the day: hi}</b>`)
-//                                 // <br/>Total crashes: ${node.values[hour_index].value['total'].toLocaleString('en')}
-//                                 // <hr/>
-//                                 // Injuries breakdown:<br/>
-//                                 // &nbsp;Fatal: ${node.values[hour_index].value['fatal'].toLocaleString('en')}<br/>
-//                                 // &nbsp;Incapacitating injury: ${node.values[hour_index].value['incapacit_injury'].toLocaleString('en')}<br/>
-//                                 // &nbsp;Non incapacitating: ${node.values[hour_index].value['n_incap'].toLocaleString('en')}<br/>
-//                                 // &nbsp;No indication of injury: ${node.values[hour_index].value['n_injury'].toLocaleString('en')}<br/>
-//                                 // &nbsp;Refused EMS: ${node.values[hour_index].value['refused_ems'].toLocaleString('en')}<br/>
-//                                 // &nbsp;Reported, not evident: ${node.values[hour_index].value['rptd_nt_evid'].toLocaleString('en')}<br/>
-//                                 // &nbsp;None: ${node.values[hour_index].value['none'].toLocaleString('en')}`)
-//             // .style("left", (d3.event.pageX) + "px")
-//             // .style("top", (d3.event.pageY + 28) + "px")
-//             .attr('class', 'tooltip');
-//
-//     })
-//     .on('mouseout', node => divToolTip.style('opacity', 0).style('left', null).style('top', null).style('z-index', -1)).classed('tooltip', false)
-//     .each((d, i) => {
-//         d3.select(`#bar_${d.key}`)
-//             .selectAll('rect')
-//             .data(data) // remove index element from the list
-//             .enter()
-//             .append('rect')
-//             .attr('x', node => x(d))
-//             .attr('y', height)
-//             .attr('stroke', 'black')
-//             .attr('stroke-width', '0.01')
-//             .attr('width', xScale.bandwidth())
-//             .attr('height', 0)
-//             .attr('fill', 'red')
-//             .transition()
-//             .duration(1500)
-//             .attr('height', node => 200)
-//             .attr('y', node =>200);
-//     });
-
+//     .append("text")
+//     .attr("class", "bar-label")
+//     .attr("y", d => (d >= 0) ? y(d) : y(0))
+//     .attr("x", (d,i) => i * 200 + 100)
+//     .attr("text-anchor", "middle") // Center the text horizontally
+//     .text(d => d)
+//     .style("font-size", "12px")
+//     .style("fill", "red");
