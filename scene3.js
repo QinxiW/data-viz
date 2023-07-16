@@ -151,6 +151,24 @@ svg.selectAll("rect")
     .duration(1500)
     .attr("height", d => Math.abs(y(d.y) - y(0)))
     .attr("fill", (d,i) => legendData[i].color);
+svg.selectAll("rect").on("mouseover", function (event, d) {
+    console.log(d);
+    const tooltip = d3.select("#app")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("background-color", "pink")
+        .style("padding", "5px")
+        .style("border", "1px solid #ccc")
+        .style("border-radius", "5px")
+        .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
+        .style("left", `${event.pageX}px`)
+        .style("top", `${event.pageY - 50}px`);
+    tooltip.html(`Value: ${data[d].y}, Inflation type: ${cpi_keys[d]}`);
+})
+.on("mouseout", function () {
+    d3.selectAll(".tooltip").remove();
+});
 
 // Append text labels on top of the bars
 svg.selectAll(".bar-label")
@@ -220,37 +238,56 @@ function updatePer(year_start, year_end) {
         .text(d => d)
         .style("font-size", "12px")
         .style("fill", "red");
+
+    svg.selectAll("rect").on("mouseover", function (event, d) {
+        console.log(d);
+        const tooltip = d3.select("#app")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("background-color", "pink")
+            .style("padding", "5px")
+            .style("border", "1px solid #ccc")
+            .style("border-radius", "5px")
+            .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
+            .style("left", `${event.pageX}px`)
+            .style("top", `${event.pageY - 50}px`);
+        tooltip.html(`Value: ${data[d].toFixed(2)}, Inflation type: ${cpi_keys[d]}`);
+    })
+        .on("mouseout", function () {
+            d3.selectAll(".tooltip").remove();
+        });
 }
 
 // What happens when the mouse move -> show the annotations at the right positions.
-function mousemove() {
-    let data;
-    if (selectedOption === "headline_cpi"){
-        data = window.headline_cpi;
-    } else if (selectedOption === "energy_cpi"){
-        data = window.energy_cpi;
-    } else if (selectedOption === "food_cpi"){
-        data = window.food_cpi;
-    } else if (selectedOption === "core_cpi"){
-        data = window.core_cpi;
-    } else if (selectedOption === "producer_pi"){
-        data = window.producer_pi;
-    }
-    // recover coordinate we need
-    var x0 = x.invert(d3.mouse(this)[0]);
-    var i = bisect(data, x0, 1);
-    let selectedData = data[i-1];
-    focus
-        .attr("cx", x(selectedData.x)+12)
-        .attr("cy", y(selectedData.y));
-    // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
-    focusText
-        .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
-        .attr("x", x(selectedData.x)+10)
-        .attr("y", y(selectedData.y))
-        .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-        .style("top", (d3.mouse(this)[1])+100 + "px");
-}
+// function mousemove() {
+//     let data;
+//     if (selectedOption === "headline_cpi"){
+//         data = window.headline_cpi;
+//     } else if (selectedOption === "energy_cpi"){
+//         data = window.energy_cpi;
+//     } else if (selectedOption === "food_cpi"){
+//         data = window.food_cpi;
+//     } else if (selectedOption === "core_cpi"){
+//         data = window.core_cpi;
+//     } else if (selectedOption === "producer_pi"){
+//         data = window.producer_pi;
+//     }
+//     // recover coordinate we need
+//     var x0 = x.invert(d3.mouse(this)[0]);
+//     var i = bisect(data, x0, 1);
+//     let selectedData = data[i-1];
+//     focus
+//         .attr("cx", x(selectedData.x)+12)
+//         .attr("cy", y(selectedData.y));
+//     // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
+//     focusText
+//         .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
+//         .attr("x", x(selectedData.x)+10)
+//         .attr("y", y(selectedData.y))
+//         .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+//         .style("top", (d3.mouse(this)[1])+100 + "px");
+// }
 
 let selectedStartYear = this.slider.value ? this.slider.value : 1970;
 let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
