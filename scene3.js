@@ -1,11 +1,18 @@
 // filter by type and year change
 const slider = d3.select("#slider");
-const output = d3.select("body").append("p");
-// default init
-output.text(1970);
+const output = d3.select("#app").append("p");
+
+
+const slider2 = d3.select("#slider2");
+const output2 = d3.select("#app").append("p");
+
 // Update the output value when the slider changes
 slider.on("input", function() {
     output.text(this.value);
+});
+
+slider2.on("input", function() {
+    output2.text(this.value);
 });
 // filter by inflation category on year row
 
@@ -122,14 +129,14 @@ svg.selectAll("rect")
     .transition()
     .duration(1500)
     .attr("height", d => Math.abs(y(d.y) - y(0)))
-    .attr("fill", "steelblue");
+    .attr("fill", (d,i) => legendData[i].color);
 
 
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
 
 function updatePer(year_start, year_end) {
-//     todo
+
     headline_endValue = window.headline_cpi_dict[year_end]
     headline_startValue = window.headline_cpi_dict[year_start]
     const headline_percentageDiff = ((headline_endValue - headline_startValue) / Math.abs(headline_startValue)) * 100;
@@ -166,7 +173,7 @@ function updatePer(year_start, year_end) {
         .transition()
         .duration(1500)
         .attr("height", d => Math.abs(y(d) - y(0)))
-        .attr("fill", "steelblue");
+        .attr("fill", (d,i) => legendData[i].color);
 }
 
 // What happens when the mouse move -> show the annotations at the right positions.
@@ -199,102 +206,25 @@ function mousemove() {
         .style("top", (d3.mouse(this)[1])+100 + "px");
 }
 
-let selectedOption;
+let selectedStartYear = this.slider.value ? this.slider.value : 1970;
+let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
+// default init
+output.text(selectedStartYear);
+output2.text(selectedEndYear);
+
 // dropdown update
 d3.select("#slider")
     .on("input", function() {
-        selectedOption = this.value;
+        selectedStartYear = this.value;
         output.text(this.value);
-        console.log("Selected option:", selectedOption);
-        updatePer(1970, selectedOption)
-        // svg.selectAll(".legend-item").remove();
-        // legendItems = svg.selectAll(".legend-item")
-        //     .data(legendData)
-        //     .enter()
-        //     .append("g")
-        //     .attr("class", "legend-item")
-        //     .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top})`);
-        // legendItems.append("circle")
-        //     .attr("cx", 8)
-        //     .attr("cy", 8)
-        //     .attr("r", 8)
-        //     .attr("fill", d => d.color)
-        //     .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
-        // legendItems.append("text")
-        //     .attr("x", 20)
-        //     .attr("y", 12)
-        //     .text(d => d.label)
-        //     .attr("font-size", "12px")
-        //     .style("font-family", "Andale Mono")
-        //     .attr("alignment-baseline", "middle")
-        //     .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
-        //
-        // svg.selectAll("rect").remove();
-        // if(selectedOption === 'energy_cpi'){
-        //     // Draw the bars
-        //     svg.selectAll("rect")
-        //         .data(window.energy_cpi)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-        //         .attr("x", d => xScale(d.x))
-        //         .attr("width", xScale.bandwidth())
-        //         .transition()
-        //         .duration(1500)
-        //         .attr("height", d => Math.abs(y(d.y) - y(0)))
-        //         .attr("fill", "brown");
-        // } else if (selectedOption === 'headline_cpi') {
-        //     // svg.selectAll("rect").remove();
-        //     svg.selectAll("rect")
-        //         .data(window.headline_cpi)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-        //         .attr("x", d => xScale(d.x))
-        //         .attr("width", xScale.bandwidth())
-        //         .transition()
-        //         .duration(1500)
-        //         .attr("height", d => Math.abs(y(d.y) - y(0)))
-        //         .attr("fill", "steelblue");
-        // } else if (selectedOption === 'core_cpi') {
-        //     // svg.selectAll("rect").remove();
-        //     svg.selectAll("rect")
-        //         .data(window.core_cpi)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-        //         .attr("x", d => xScale(d.x))
-        //         .attr("width", xScale.bandwidth())
-        //         .transition()
-        //         .duration(1500)
-        //         .attr("height", d => Math.abs(y(d.y) - y(0)))
-        //         .attr("fill", "orange");
-        // } else if (selectedOption === 'food_cpi') {
-        //     // svg.selectAll("rect").remove();
-        //     svg.selectAll("rect")
-        //         .data(window.food_cpi)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-        //         .attr("x", d => xScale(d.x))
-        //         .attr("width", xScale.bandwidth())
-        //         .transition()
-        //         .duration(1500)
-        //         .attr("height", d => Math.abs(y(d.y) - y(0)))
-        //         .attr("fill", "purple");
-        // } else if (selectedOption === 'producer_pi') {
-        //     // svg.selectAll("rect").remove();
-        //     svg.selectAll("rect")
-        //         .data(window.producer_pi)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("y", d => (d.y >= 0) ? y(d.y) : y(0))
-        //         .attr("x", d => xScale(d.x))
-        //         .attr("width", xScale.bandwidth())
-        //         .transition()
-        //         .duration(1500)
-        //         .attr("height", d => Math.abs(y(d.y) - y(0)))
-        //         .attr("fill", "darkgreen");
-        // }
+        console.log("selectedStartYear:", selectedStartYear);
+        updatePer(selectedStartYear, selectedEndYear);
+    });
 
+d3.select("#slider2")
+    .on("input", function() {
+        selectedEndYear = this.value;
+        output2.text(this.value);
+        console.log("selectedEndYear:", selectedEndYear);
+        updatePer(selectedStartYear, selectedEndYear);
     });
