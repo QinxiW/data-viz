@@ -287,3 +287,43 @@ function mouseout() {
         focus.style("opacity", 0)
         // focusText.style("opacity", 0)
 }
+
+const annotations = [
+        {
+        note: {
+                label:
+                    "2008 crsis",
+                title: "title test",
+                wrap: 150,
+                align: "middle"
+        },
+        //can use x, y directly instead of data
+        data: { x: 2018, y: 10 },
+        dy: -100,
+        dx: 0,
+        type: d3.annotationLabel,
+        connector: { end: "dot" },
+        }]
+
+const makeAnnotations = d3.annotation()
+    .editMode(true)
+    //also can set and override in the note.padding property
+    //of the annotation object
+    .notePadding(15)
+    .type(d3.annotationLabel)
+    //accessors & accessorsInverse not needed
+    //if using x, y in annotations JSON
+    .accessors({
+            x: d => x((d.x)),
+            y: d => y(d.y)
+    })
+    .accessorsInverse({
+            date: d => (x.invert(d.x)),
+            close: d => y.invert(d.y)
+    })
+    .annotations(annotations)
+
+d3.select("svg")
+    .append("g")
+    .attr("class", "annotation-group")
+    .call(makeAnnotations)

@@ -61,6 +61,15 @@ var y = d3.scaleLinear()
 svg.append("g")
     .call(d3.axisLeft(y));
 
+//Add horizontal gridlines
+const yGrid = svg.append("g")
+    .attr("class", "grid")
+    // .attr("transform", `translate(${margin.left}, 0)`)
+    .call(d3.axisLeft(y).tickSize(-width + margin.left + margin.right).tickFormat(""))
+    .attr("stroke", "lightgrey")
+    .attr("opacity", 0.15)
+;
+
 // create a line func
 const line = d3.line()
     .x(d => x(d.x))
