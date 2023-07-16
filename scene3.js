@@ -36,11 +36,23 @@ let data = [window.headline_cpi[0], window.energy_cpi[0], window.food_cpi[0],
 var x = d3.scaleLinear()
     .domain(cpi_keys)
     .range([0, width]);
-
 svg.append("g")
     .attr("class", "x-axis")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
+
+// X axis
+// var x = d3.scaleBand()
+//     .range([ 0, width ])
+//     .domain(cpi_keys)
+//     .padding(0.2);
+// svg.append("g")
+//     .attr("transform", "translate(0," + height + ")")
+//     .call(d3.axisBottom(x))
+//     .selectAll("text")
+//     .attr("transform", "translate(-10,0)rotate(-45)")
+//     .style("text-anchor", "end");
+
 
 var y = d3.scaleLinear()
     .domain([-100,60])  // todo custom
@@ -84,20 +96,20 @@ const legendItems = svg.selectAll(".legend-item")
     .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 20})`);
 
 // Draw color dots
-legendItems.append("circle")
-    .attr("cx", 8)
-    .attr("cy", 8)
-    .attr("r", 8)
-    .attr("fill", d => d.color);
+// legendItems.append("circle")
+//     .attr("cx", 8)
+//     .attr("cy", 8)
+//     .attr("r", 8)
+//     .attr("fill", d => d.color);
 
 // Add labels
-legendItems.append("text")
-    .attr("x", 20)
-    .attr("y", 12)
-    .text(d => d.label)
-    .attr("font-size", "12px")
-    .style("font-family", "Andale Mono")
-    .attr("alignment-baseline", "middle");
+// legendItems.append("text")
+//     .attr("x", 20)
+//     .attr("y", 12)
+//     .text(d => d.label)
+//     .attr("font-size", "12px")
+//     .style("font-family", "Andale Mono")
+//     .attr("alignment-baseline", "middle");
 
 // scale for the bars
 const xScale = d3.scaleBand()
@@ -113,10 +125,10 @@ const axisLabelsText =
     .append("text")
     .attr("class", "axis-label")
     .attr("x", (d,i) => i * 200 + 100)
-    .attr("y", height + 10)
+    .attr("y", height + 20)
     .attr("text-anchor", "start") // Center the text on the tick position
     .text(d => d)
-    .style("font-size", "12px");
+    .style("font-size", "24px");
 
 // preview before select dropdown
 svg.selectAll("rect")
@@ -131,6 +143,18 @@ svg.selectAll("rect")
     .attr("height", d => Math.abs(y(d.y) - y(0)))
     .attr("fill", (d,i) => legendData[i].color);
 
+// Append text labels on top of the bars
+svg.selectAll("rect")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("class", "bar-label")
+    .attr("x", d => xScale(d.y) + xScale.bandwidth() / 2)
+    .attr("y", d => y(d.y) - 5) // Adjust the vertical position of the text
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .text(d => d.y)
+    .style("font-size", "12px")
+    .style("fill", "white");
 
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
@@ -174,6 +198,19 @@ function updatePer(year_start, year_end) {
         .duration(1500)
         .attr("height", d => Math.abs(y(d) - y(0)))
         .attr("fill", (d,i) => legendData[i].color);
+
+    // Append text labels on top of the bars
+    svg.selectAll(".bar-label")
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("class", "bar-label")
+        .attr("y", d => (d >= 0) ? y(d) : y(0))
+        .attr("x", (d,i) => i * 200 + 100)
+        .attr("text-anchor", "middle") // Center the text horizontally
+        .text(d => d)
+        .style("font-size", "12px")
+        .style("fill", "white");
 }
 
 // What happens when the mouse move -> show the annotations at the right positions.
@@ -228,3 +265,13 @@ d3.select("#slider2")
         console.log("selectedEndYear:", selectedEndYear);
         updatePer(selectedStartYear, selectedEndYear);
     });
+
+var tooltip = d3.select("#app")
+    .append("div")
+    .style("opacity", 1)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")

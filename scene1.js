@@ -5,7 +5,6 @@ const data = [
         [...window.headline_cpi], [...window.energy_cpi], [...window.food_cpi],
         [...window.core_cpi], [...window.producer_pi]
 ];
-console.log(data);
 
 // Set the dimensions of the SVG container
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
@@ -20,6 +19,11 @@ const svg = d3.select("body")
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+// Define the line function
+const line = d3.line()
+    .x(d => x(d.x))
+    .y(d => y(d.y));
+
 // Define the scales for x and y axes
 var x = d3.scaleLinear()
     .domain([1970, 2025])
@@ -33,12 +37,17 @@ var y = d3.scaleLinear()
     .domain([-10,30])
     .range([ height, 0]);
 svg.append("g")
+    .attr("class", "yTicks")
     .call(d3.axisLeft(y));
 
-// Define the line function
-const line = d3.line()
-    .x(d => x(d.x))
-    .y(d => y(d.y));
+//Add horizontal gridlines
+const yGrid = svg.append("g")
+    .attr("class", "grid")
+    // .attr("transform", `translate(${margin.left}, 0)`)
+    .call(d3.axisLeft(y).tickSize(-width + margin.left + margin.right).tickFormat(""))
+    .attr("stroke", "lightgrey")
+    .attr("opacity", 0.15)
+;
 
 // Calculate y-coordinate for zero line
 const zeroY = y(0);
