@@ -153,17 +153,17 @@ svg.selectAll("rect")
     .attr("fill", (d,i) => legendData[i].color);
 
 // Append text labels on top of the bars
-svg.selectAll("rect")
+svg.selectAll(".bar-label")
     .data(data)
     .enter()
     .append("text")
     .attr("class", "bar-label")
-    .attr("x", d => xScale(d.y) + xScale.bandwidth() / 2)
-    .attr("y", d => y(d.y) - 5) // Adjust the vertical position of the text
+    .attr("y", d => (d >= 0) ? y(d) : y(0))
+    .attr("x", (d,i) => i * 200 + 100)
     .attr("text-anchor", "middle") // Center the text horizontally
     .text(d => d.y)
     .style("font-size", "12px")
-    .style("fill", "white");
+    .style("fill", "red");
 
 // This allows to find the closest X index of the mouse:
 var bisect = d3.bisector(function(d) { return d.x; }).left;
@@ -219,7 +219,7 @@ function updatePer(year_start, year_end) {
         .attr("text-anchor", "middle") // Center the text horizontally
         .text(d => d)
         .style("font-size", "12px")
-        .style("fill", "white");
+        .style("fill", "red");
 }
 
 // What happens when the mouse move -> show the annotations at the right positions.
@@ -275,12 +275,52 @@ d3.select("#slider2")
         updatePer(selectedStartYear, selectedEndYear);
     });
 
-var tooltip = d3.select("#app")
-    .append("div")
-    .style("opacity", 1)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px")
+// // Add tooltip
+// var divToolTip = d3.select('body')
+//     .append('div')
+//     .attr('id', 'tooltip')
+//     .style('opacity', 0);
+
+// svg.selectAll('rect')
+//     .data(data)
+//     .enter()
+//     .append('g')
+//     .attr('id', (d, i) => `bar_${d.key}`)
+//     .on('mouseenter', (node, i) => {
+//         divToolTip.style("opacity", 1).style('z-index', 10);
+//         divToolTip.html(`<b>Hour of the day: hi}</b>`)
+//                                 // <br/>Total crashes: ${node.values[hour_index].value['total'].toLocaleString('en')}
+//                                 // <hr/>
+//                                 // Injuries breakdown:<br/>
+//                                 // &nbsp;Fatal: ${node.values[hour_index].value['fatal'].toLocaleString('en')}<br/>
+//                                 // &nbsp;Incapacitating injury: ${node.values[hour_index].value['incapacit_injury'].toLocaleString('en')}<br/>
+//                                 // &nbsp;Non incapacitating: ${node.values[hour_index].value['n_incap'].toLocaleString('en')}<br/>
+//                                 // &nbsp;No indication of injury: ${node.values[hour_index].value['n_injury'].toLocaleString('en')}<br/>
+//                                 // &nbsp;Refused EMS: ${node.values[hour_index].value['refused_ems'].toLocaleString('en')}<br/>
+//                                 // &nbsp;Reported, not evident: ${node.values[hour_index].value['rptd_nt_evid'].toLocaleString('en')}<br/>
+//                                 // &nbsp;None: ${node.values[hour_index].value['none'].toLocaleString('en')}`)
+//             // .style("left", (d3.event.pageX) + "px")
+//             // .style("top", (d3.event.pageY + 28) + "px")
+//             .attr('class', 'tooltip');
+//
+//     })
+//     .on('mouseout', node => divToolTip.style('opacity', 0).style('left', null).style('top', null).style('z-index', -1)).classed('tooltip', false)
+//     .each((d, i) => {
+//         d3.select(`#bar_${d.key}`)
+//             .selectAll('rect')
+//             .data(data) // remove index element from the list
+//             .enter()
+//             .append('rect')
+//             .attr('x', node => x(d))
+//             .attr('y', height)
+//             .attr('stroke', 'black')
+//             .attr('stroke-width', '0.01')
+//             .attr('width', xScale.bandwidth())
+//             .attr('height', 0)
+//             .attr('fill', 'red')
+//             .transition()
+//             .duration(1500)
+//             .attr('height', node => 200)
+//             .attr('y', node =>200);
+//     });
+
