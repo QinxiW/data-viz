@@ -9,16 +9,45 @@
     <script src="converted_data.js" charset="utf-8"></script>
     <!-- Include CSS -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        .button {
+            background-color: lightgrey;
+            color: #4b6ab9;
+            border: 2px solid #4b6ab9;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 24px;
+            cursor: pointer;
+            font-family: "Andale Mono";
+        }
+        .button2 {
+            background-color: #4b6ab9; /* Blue */
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 24px;
+            cursor: pointer;
+            font-family: "Andale Mono";
+        }
+
+        .dropdown {background-color: white; color: black; border: 2px solid #4b6ab9; }
+    </style>
 </head>
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
 <div id="app">
     <h3>Hello Scene 2 test</h3>
-    <button onclick="location.href='index.html'" type="button">
-        Prev</button>
-    <select id="dropdown"></select>
-    <button onclick="location.href='scene3.html'" type="button">
-        Next</button>
+    <button onclick="location.href='index.html'" type="button" class="button">
+        << Previous </button>
+    <select id="dropdown" class="button dropdown"></select>
+    <button onclick="location.href='scene3.html'" type="button" class="button2">
+        Next >> </button>
     <p></p>
 </div>
 <script src="scene2.js"></script>

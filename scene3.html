@@ -10,15 +10,30 @@
     <script src="converted_data.js" charset="utf-8"></script>
     <!-- Include CSS -->
     <style>
-        .slider {
-            width: 800px;
-            display: flex;
-            margin: 10px;
+        .button {
+            background-color: lightgrey;
+            color: #4b6ab9;
+            border: 2px solid #4b6ab9;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 24px;
+            cursor: pointer;
+            font-family: "Andale Mono";
         }
-        .slider input[type="range"] {
-            width: 100%;
-            margin: 10px;
-            padding-right: 10px;
+        .button2 {
+            background-color: #4b6ab9; /* Blue */
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 24px;
+            cursor: pointer;
+            font-family: "Andale Mono";
         }
     </style>
 </head>
@@ -26,20 +41,22 @@
 <body>
 <div id="app">
     <h3>Hello Scene 3</h3>
-    <button onclick="location.href='scene2.html'" type="button">
-        Prev</button>
-    <button onclick="location.href='index.html'" type="button">
-        Restart</button>
+    <button onclick="location.href='scene2.html'" type="button" class="button">
+        << Previous</button>
+    <button onclick="location.href='index.html'" type="button" class="button button2">
+        Restart >> </button>
     <p></p>
     <div class="slider_con">
 <!--        <label for="slider">Start Year</label>-->
-        <output id="value"></output>
-        <input type="range" min="1970" max="2022" value="1970" step="1" id="slider" onchange="(this.value)">
+        <output id="value" style="font-size: 14pt;"></output>
+        <input type="range" min="1970" max="2022" value="1970" step="1"
+               id="slider" onchange="(this.value)" style="margin-right: 30px;width: 30%;">
 <!--        <div></div>-->
 <!--        <label for="slider2">End Year</label>-->
-        <output id="value2"></output>
-        <input type="range" min="1970" max="2022" value="2022" step="1" id="slider2" onchange="(this.value)">
-
+        <output id="value2" style="font-size: 14pt;"></output>
+        <input type="range" min="1970" max="2022" value="2022" step="1"
+               id="slider2" onchange="(this.value)" style="margin-right: 30px;width: 30%;">
+        <p></p>
     </div>
 </div>
 <script src="scene3.js">

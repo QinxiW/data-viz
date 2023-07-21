@@ -10,14 +10,27 @@
     <script src="data/data_dict.js" charset="utf-8"></script>
     <script src="converted_data.js" charset="utf-8"></script>
     <!-- Include CSS -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .button {
+            background-color: #4b6ab9; /* Blue */
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            margin-left: 24px;
+            cursor: pointer;
+            font-family: "Andale Mono";
+        }
+    </style>
 </head>
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
 <div id="app">
     <h1>Narrative Viz on US Inflation 1970 - 2022</h1>
-    <button onclick="location.href='scene2.html'" type="button">
-        Next</button>
+    <button onclick="location.href='scene2.html'" type="button" class="button">
+        Next >> </button>
     <p></p>
 </div>
 <script src="scene1.js"></script>
