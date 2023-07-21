@@ -290,6 +290,36 @@ function mouseout() {
 
 const annotations = [
         {
+                note: {
+                        label:
+                            "1974 oil shocks",
+                        title: "title test",
+                        wrap: 150,
+                        align: "middle"
+                },
+                //can use x, y directly instead of data
+                data: { x: 1975.5, y: 18.2 },
+                dy: -80,
+                dx: 200,
+                type: d3.annotationLabel,
+                connector: { end: "dot" },
+        },
+        {
+                note: {
+                        label:
+                            "2nd oil shocks",
+                        title: "Iran–Iraq War",
+                        wrap: 150,
+                        align: "middle"
+                },
+                //can use x, y directly instead of data
+                data: { x: 1981.5, y: 13.8 },
+                dy: -80,
+                dx: 200,
+                type: d3.annotationLabel,
+                connector: { end: "dot" },
+        },
+        {
         note: {
                 label:
                     "2008 crsis",
@@ -298,12 +328,28 @@ const annotations = [
                 align: "middle"
         },
         //can use x, y directly instead of data
-        data: { x: 2018, y: 10 },
+        data: { x: 2008, y: 10 },
         dy: -100,
         dx: 0,
         type: d3.annotationLabel,
         connector: { end: "dot" },
-        }]
+        },
+        {
+                note: {
+                        label:
+                            "2020 covid",
+                        title: "covid",
+                        wrap: 150,
+                        align: "middle"
+                },
+                //can use x, y directly instead of data
+                data: { x: 2020, y: 10 },
+                dy: -100,
+                dx: 0,
+                type: d3.annotationLabel,
+                connector: { end: "dot" },
+        }
+        ]
 
 const makeAnnotations = d3.annotation()
     .editMode(true)
