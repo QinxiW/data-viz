@@ -1,14 +1,14 @@
 // filter by type and year change
 const slider = d3.select("#slider");
-const output = d3.select("#app").append("p");
+const output = d3.select("#value");
 
 
 const slider2 = d3.select("#slider2");
-const output2 = d3.select("#app").append("p");
+const output2 = d3.select("#value2");
 
 // Update the output value when the slider changes
 slider.on("input", function() {
-    output.text(this.value);
+    output.text('start year' + this.value);
 });
 
 slider2.on("input", function() {
@@ -34,14 +34,14 @@ var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi
 let selectedStartYear = this.slider.value ? this.slider.value : 1970;
 let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
 // default init
-output.text(selectedStartYear);
-output2.text(selectedEndYear);
+output.text('Start Year: ' + selectedStartYear);
+output2.text('End Year: ' + selectedEndYear);
 
 // dropdown update
 d3.select("#slider")
     .on("input", function() {
         selectedStartYear = this.value;
-        output.text(this.value);
+        output.text('Start Year: ' + this.value);
         console.log("selectedStartYear:", selectedStartYear);
         updatePer(selectedStartYear, selectedEndYear);
     });
@@ -49,7 +49,7 @@ d3.select("#slider")
 d3.select("#slider2")
     .on("input", function() {
         selectedEndYear = this.value;
-        output2.text(this.value);
+        output2.text('End Year: '+ this.value);
         console.log("selectedEndYear:", selectedEndYear);
         updatePer(selectedStartYear, selectedEndYear);
     });

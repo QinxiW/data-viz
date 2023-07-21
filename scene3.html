@@ -11,10 +11,14 @@
     <!-- Include CSS -->
     <style>
         .slider {
-            width: 500px;
+            width: 800px;
+            display: flex;
+            margin: 10px;
         }
         .slider input[type="range"] {
             width: 100%;
+            margin: 10px;
+            padding-right: 10px;
         }
     </style>
 </head>
@@ -27,11 +31,15 @@
     <button onclick="location.href='index.html'" type="button">
         Restart</button>
     <p></p>
-    <div class="slider">
-        <input type="range" min="1970" max="2022" value="1970" step="1" id="slider" onchange="(this.value)">
+    <div class="slider_con">
+<!--        <label for="slider">Start Year</label>-->
         <output id="value"></output>
-        <input type="range" min="1970" max="2022" value="2022" step="1" id="slider2" onchange="(this.value)">
+        <input type="range" min="1970" max="2022" value="1970" step="1" id="slider" onchange="(this.value)">
+<!--        <div></div>-->
+<!--        <label for="slider2">End Year</label>-->
         <output id="value2"></output>
+        <input type="range" min="1970" max="2022" value="2022" step="1" id="slider2" onchange="(this.value)">
+
     </div>
 </div>
 <script src="scene3.js">

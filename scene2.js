@@ -156,6 +156,8 @@ svg
     .on('mousemove', mousemove)
     .on('mouseout', mouseout);
 
+// todo annotation on drastic changed year %
+
 
 // What happens when the mouse move -> show the annotations at the right positions.
 function mouseover() {
