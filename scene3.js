@@ -315,7 +315,7 @@ svg.selectAll("rect").on("mouseover", function (event, d) {
         .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
         .style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY - 50}px`);
-    tooltip.html(`Value: ${data[d]}, Inflation type: ${cpi_keys[d]}, Year: ${selectedStartYear} - ${selectedEndYear}`);
+    tooltip.html(`Percentage % change: ${data[d]}, Inflation type: ${cpi_keys[d]}, Year: ${selectedStartYear} - ${selectedEndYear}`);
 })
     .on("mouseout", function () {
         d3.selectAll(".tooltip").remove();
