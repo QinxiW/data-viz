@@ -296,8 +296,8 @@ const annotations = [
         {
                 note: {
                         label:
-                            "1974 oil shocks",
-                        title: "title test",
+                            "global oil crisis led to surge in oil prices and triggered inflation",
+                        title: "1974 Oil Shocks",
                         wrap: 150,
                         align: "middle"
                 },
@@ -311,40 +311,39 @@ const annotations = [
         {
                 note: {
                         label:
-                            "2nd oil shocks",
-                        title: "Iran–Iraq War",
+                            "war led to the 2nd oil shocks, caused another inflation hike",
+                        title: "1980s Iran–Iraq War",
                         wrap: 150,
                         align: "middle"
                 },
                 //can use x, y directly instead of data
                 data: { x: 1981.5, y: 13.8 },
                 dy: -80,
-                dx: 200,
+                dx: 300,
                 type: d3.annotationLabel,
                 connector: { end: "dot" },
         },
         {
                 note: {
                         label:
-                            "late 90s tech bubble The dot-com bubble in the late 1990s led to a surge in stock prices, " +
-                            "which contributed to overall inflationary pressures in the economy.",
-                        title: "dot com bubble",
-                        wrap: 150,
+                            "late 90s dot-com bubble led to high stock prices and surged then down inflation",
+                        title: "1998 Tech Bubble",
+                        wrap: 200,
                         align: "middle"
                 },
                 //can use x, y directly instead of data
                 data: { x: 1999.4, y: -3.5 },
-                dy: 40,
-                dx: 10,
+                dy: 10,
+                dx: -120,
                 type: d3.annotationLabel,
                 connector: { end: "dot" },
         },
         {
         note: {
                 label:
-                    "2008 financial crisis",
-                title: "title test",
-                wrap: 150,
+                    "collapse of the housing market and financial institutions triggered a severe recession that led to inflation fluctuations",
+                title: "2008 Financial crisis",
+                wrap: 200,
                 align: "middle"
         },
         //can use x, y directly instead of data
@@ -357,15 +356,15 @@ const annotations = [
         {
         note: {
                 label:
-                    "2020 covid",
-                title: "covid",
-                wrap: 150,
+                    "pandemic led to significant disruptions in economic activities, caused volatility in inflation rates",
+                title: "2020 COVID-19",
+                wrap: 250,
                 align: "middle"
         },
         //can use x, y directly instead of data
         data: { x: 2021.5, y: -3 },
-        dy: 40,
-        dx: 10,
+        dy: 10,
+        dx: -70,
         type: d3.annotationLabel,
         connector: { end: "dot" },
         }
