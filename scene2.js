@@ -163,14 +163,19 @@ var focus = svg
     .attr("stroke", "black")
     .attr('r', 8.5)
     .style("opacity", 0)
+    .style("position", "absolute")
+    .style("z-index", 10000);
 
 // Create the text that travels along the curve of chart
 var focusText = svg
     .append('g')
     .append('text')
     .style("opacity", 0)
+    .attr("class", "focusText")
     .attr("text-anchor", "left")
     .attr("alignment-baseline", "middle")
+    .style("position", "absolute")
+    .style("z-index", 10000);
 
 svg
     .append('rect')
@@ -184,14 +189,17 @@ svg
 
 // todo annotation on drastic changed year %
 
+focusText.raise();
 
 // What happens when the mouse move -> show the annotations at the right positions.
 function mouseover() {
+    focusText.raise();
     focus.style("opacity", 1)
     focusText.style("opacity",1)
 }
 
 function mousemove() {
+    focusText.raise();
     let data;
     let fill;
     console.log('selectedOption in mouse' + selectedOption);
@@ -212,35 +220,64 @@ function mousemove() {
         fill = "darkgreen";
     }
     // recover coordinate we need
+    const [mouseX, mouseY] = d3.mouse(this);
+    // console.log('mouseX: ' + mouseX + 'mouseY: ' + mouseY)
+
+    // Find closest X index
+    const xValue = x.invert(mouseX);
+    const yValue = y.invert(mouseY);
+
     var x0 = x.invert(d3.mouse(this)[0]);
     var i = bisect(data, x0, 1);
     let selectedData = data[i-1];
     focus
-        .attr("cx", x(selectedData.x)+15)
-        .attr("cy", y(selectedData.y)+2)
-        .style("fill",  fill)
-        .raise();
+        .raise()
+        .attr("cx", x(selectedData.x) + 15)
+        .attr("cy", y(selectedData.y) + 2)
+        .style("fill", fill)
+    ;
+    let y_offset = -35;
+    if (yValue <= 15) {
+        y_offset = -60;
+    }
+    console.log('yvalue: ' + yValue + '  offset: ' + y_offset );
+    if (xValue <= 2000) {
         // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
-    focusText
-        .html("year:" + selectedData.x + "     |      " + "inflation:" + selectedData.y)
-        .attr("x", x(selectedData.x)+10)
-        .attr("y", y(selectedData.y)-20)
-        .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-        .style("top", (d3.mouse(this)[1])+100 + "px")
-        .style("font-family", "Andale Mono")
-        .raise();
+        focusText
+            .html("year:" + selectedData.x + "     |      " + "inflation:" + selectedData.y)
+            .attr("x", x(selectedData.x) + 10)
+            .attr("y", y(selectedData.y) + y_offset)
+            .style("left", (d3.mouse(this)[0]) + 90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .style("top", (d3.mouse(this)[1]) + 100 + "px")
+            .style("font-family", "Andale Mono")
+            .style("position", "absolute")
+            .style("z-index", 10000)
+        ;
+    } else {
+        focusText
+            .html("year:" + selectedData.x + "     |      " + "inflation:" + selectedData.y)
+            .attr("x", x(selectedData.x) - 240)
+            .attr("y", y(selectedData.y) + y_offset)
+            .style("left", (d3.mouse(this)[0]) + 90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .style("top", (d3.mouse(this)[1]) + 100 + "px")
+            .style("font-family", "Andale Mono")
+            .style("position", "absolute")
+            .style("z-index", 10000)
+        ;
+    }
 }
 function mouseout() {
     focus.style("opacity", 0)
     focusText.style("opacity", 0)
 }
-
+focusText.raise();
 
 // dropdown update
 d3.select("#dropdown")
     .on("change", function() {
         selectedOption = d3.select(this).property("value");
         console.log("Selected option:", selectedOption);
+
         svg.selectAll(".legend-item").remove();
         legendItems = svg.selectAll(".legend-item")
             .data(legendData)
@@ -264,6 +301,7 @@ d3.select("#dropdown")
             .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
 
         svg.selectAll("rect").remove();
+        focusText.raise();
         if(selectedOption === 'Energy Consumer Price Inflation Index'){
             // Draw the bars
             svg.selectAll("rect")
@@ -330,7 +368,7 @@ d3.select("#dropdown")
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "darkgreen");
         }
-
+        focusText.raise();
         svg
             .append('rect')
             .style("fill", "none")
