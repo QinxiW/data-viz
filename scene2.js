@@ -167,32 +167,41 @@ function mouseover() {
 
 function mousemove() {
     let data;
+    let fill;
     console.log('selectedOption in mouse' + selectedOption);
     if (selectedOption === "headline_cpi"){
         data = window.headline_cpi;
+        fill = "steelblue";
     } else if (selectedOption === "energy_cpi"){
         data = window.energy_cpi;
+        fill = "brown";
     } else if (selectedOption === "food_cpi"){
         data = window.food_cpi;
+        fill = "purple";
     } else if (selectedOption === "core_cpi"){
         data = window.core_cpi;
+        fill = "orange";
     } else if (selectedOption === "producer_pi"){
         data = window.producer_pi;
+        fill = "darkgreen";
     }
     // recover coordinate we need
     var x0 = x.invert(d3.mouse(this)[0]);
     var i = bisect(data, x0, 1);
     let selectedData = data[i-1];
     focus
-        .attr("cx", x(selectedData.x)+12)
-        .attr("cy", y(selectedData.y));
+        .attr("cx", x(selectedData.x)+15)
+        .attr("cy", y(selectedData.y)+2)
+        .style("fill",  fill)
+        .raise();
         // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
     focusText
         .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
         .attr("x", x(selectedData.x)+10)
-        .attr("y", y(selectedData.y))
+        .attr("y", y(selectedData.y)-20)
         .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-        .style("top", (d3.mouse(this)[1])+100 + "px");
+        .style("top", (d3.mouse(this)[1])+100 + "px")
+        .raise();
 }
 function mouseout() {
     focus.style("opacity", 0)

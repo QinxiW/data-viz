@@ -320,34 +320,50 @@ const annotations = [
                 connector: { end: "dot" },
         },
         {
+                note: {
+                        label:
+                            "late 90s tech bubble The dot-com bubble in the late 1990s led to a surge in stock prices, " +
+                            "which contributed to overall inflationary pressures in the economy.",
+                        title: "dot com bubble",
+                        wrap: 150,
+                        align: "middle"
+                },
+                //can use x, y directly instead of data
+                data: { x: 1999.4, y: -3.5 },
+                dy: 40,
+                dx: 10,
+                type: d3.annotationLabel,
+                connector: { end: "dot" },
+        },
+        {
         note: {
                 label:
-                    "2008 crsis",
+                    "2008 financial crisis",
                 title: "title test",
                 wrap: 150,
                 align: "middle"
         },
         //can use x, y directly instead of data
-        data: { x: 2008, y: 10 },
+        data: { x: 2009.5, y: 9 },
         dy: -100,
         dx: 0,
         type: d3.annotationLabel,
         connector: { end: "dot" },
         },
         {
-                note: {
-                        label:
-                            "2020 covid",
-                        title: "covid",
-                        wrap: 150,
-                        align: "middle"
-                },
-                //can use x, y directly instead of data
-                data: { x: 2020, y: 10 },
-                dy: -100,
-                dx: 0,
-                type: d3.annotationLabel,
-                connector: { end: "dot" },
+        note: {
+                label:
+                    "2020 covid",
+                title: "covid",
+                wrap: 150,
+                align: "middle"
+        },
+        //can use x, y directly instead of data
+        data: { x: 2021.5, y: -3 },
+        dy: 40,
+        dx: 10,
+        type: d3.annotationLabel,
+        connector: { end: "dot" },
         }
         ]
 
