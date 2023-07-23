@@ -103,7 +103,7 @@ svg.append("g")
 
 
 var y = d3.scaleLinear()
-    .domain([-100,60])  // todo custom
+    .domain([-300,500])  // todo custom
     .range([ height, 0]);
 
 svg.append("g")
@@ -253,7 +253,7 @@ function updatePer(year_start, year_end) {
             .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
             .style("left", `${d3.event.pageX}px`)
             .style("top", `${d3.event.pageY - 50}px`);
-        tooltip.html(`Value: ${data[d].toFixed(2)}, 
+        tooltip.html(`Percentage % change: ${data[d].toFixed(2)}, 
             Inflation type: ${cpi_keys[d]}, Year: ${year_start} - ${year_end}`);
     })
         .on("mouseout", function () {
