@@ -61,9 +61,11 @@ let headline_startValue = window.headline_cpi_dict[selectedStartYear]
 const headline_percentageDiff = ((headline_endValue - headline_startValue) / Math.abs(headline_startValue)) * 100;
 
 // window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'
-let energy_endValue = window.energy_cpi_dict?.selectedEndYear ?? 0
-let energy_startValue = window.energy_cpi_dict?.selectedStartYear ?? 1
-const energy_percentageDiff = energy_endValue !== 0 ? ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100 : 0;
+// let energy_endValue = window.energy_cpi_dict?.selectedEndYear ?? 0
+// let energy_startValue = window.energy_cpi_dict?.selectedStartYear ?? 1
+let energy_endValue = window.energy_cpi_dict[selectedEndYear]
+let energy_startValue = window.energy_cpi_dict[selectedStartYear]
+const energy_percentageDiff = ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100;
 
 let food_endValue = window.food_cpi_dict[selectedEndYear]
 let food_startValue = window.food_cpi_dict[selectedStartYear]
@@ -213,9 +215,12 @@ function updatePer(year_start, year_end) {
     const headline_percentageDiff = ((headline_endValue - headline_startValue) / Math.abs(headline_startValue)) * 100;
 
     // window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'
-    energy_endValue = window.energy_cpi_dict?.year_end ?? 0
-    energy_startValue = window.energy_cpi_dict?.year_start ?? 1
-    const energy_percentageDiff = energy_endValue !== 0 ? ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100 : 0;
+    // energy_endValue = window.energy_cpi_dict?.year_end ?? 0
+    // energy_startValue = window.energy_cpi_dict?.year_start ?? 1
+    energy_endValue = window.energy_cpi_dict[year_end]
+    energy_startValue = window.energy_cpi_dict[year_start]
+    const energy_percentageDiff =
+        ((energy_endValue - energy_startValue) / Math.abs(energy_startValue)) * 100;
 
     food_endValue = window.food_cpi_dict[year_end]
     food_startValue = window.food_cpi_dict[year_start]
