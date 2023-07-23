@@ -1,10 +1,10 @@
 // filter by type and year change
 const slider = d3.select("#slider");
-const output = d3.select("#value");
+const output = d3.select("#value").style("font-family", "Andale Mono");
 
 
 const slider2 = d3.select("#slider2");
-const output2 = d3.select("#value2");
+const output2 = d3.select("#value2").style("font-family", "Andale Mono");
 
 // Update the output value when the slider changes
 slider.on("input", function() {
@@ -18,8 +18,8 @@ slider2.on("input", function() {
 
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
-    width = 1200 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("body")
@@ -185,7 +185,8 @@ const axisLabelsText =
     .attr("y", height + 20)
     .attr("text-anchor", "start") // Center the text on the tick position
     .text(d => d)
-    .style("font-size", "24px");
+    .style("font-size", "20px")
+    .style("font-family", "Andale Mono");
 
 
 function updatePer(year_start, year_end) {
@@ -315,7 +316,9 @@ svg.selectAll("rect").on("mouseover", function (event, d) {
         .style("pointer-events", "none") // Prevent the tooltip from blocking mouse events on bars
         .style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY - 50}px`);
-    tooltip.html(`Percentage % change: ${data[d]}, Inflation type: ${cpi_keys[d]}, Year: ${selectedStartYear} - ${selectedEndYear}`);
+    tooltip
+        .html(`Percentage % change: ${data[d]}, Inflation type: ${cpi_keys[d]}, Year: ${selectedStartYear} - ${selectedEndYear}`)
+        .style("font-family", "Andale Mono");
 })
     .on("mouseout", function () {
         d3.selectAll(".tooltip").remove();
