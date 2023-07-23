@@ -196,7 +196,7 @@ function mousemove() {
         .raise();
         // .attr("cy", selectedData.y > 0 ? y(selectedData.y) + 10 : y(selectedData.y) - 10)
     focusText
-        .html("year:" + selectedData.x + "  -  " + "inflation:" + selectedData.y)
+        .html("year:" + selectedData.x + "     |      " + "inflation:" + selectedData.y)
         .attr("x", x(selectedData.x)+10)
         .attr("y", y(selectedData.y)-20)
         .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect

@@ -187,20 +187,22 @@ const cursor = svg.append("line")
     .attr("x2", width)
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
-    .attr("stroke", "grey")
+    .attr("stroke", "lightgrey")
     .attr("stroke-width", 4)
     .style("display", "none");
 
-const annotation = svg
-    .append("text")
+const annotation =   // svg
+    // d3.select("#cursor")
+    svg.append("text")
     .attr("class", "annotation")
     .attr("x", 10)
     .attr("y", 10)
     .attr("fill", "black")
-    .style("display", "none");
+    .style("display", "none")
+    .style("background-color", "lightyellow");
 svg.on("mousemove", function() {
         const [mouseX, mouseY] = d3.mouse(this);
-        console.log('mouseX: ' + mouseX)
+        console.log('mouseX: ' + mouseX + 'mouseY: ' + mouseY)
 
         // Find closest X index
         const xValue = x.invert(mouseX);
@@ -227,7 +229,8 @@ svg.on("mousemove", function() {
         if (closestX <= 1996){
                 annotation
                     .attr("x", mouseX + 5)   //todo fix place
-                    .attr("y", mouseY - 5)
+                    // .attr("y", mouseY - 5)
+                    .attr("y", 245)
                     .text(`year: ${closestX.toString()} | 
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
                 energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
@@ -238,11 +241,12 @@ svg.on("mousemove", function() {
                     .attr("font-size", "12px")
                     .style("font-family", "Andale Mono")
                     .attr("transform", (d, i) => `translate(${margin.left}, ${margin.top + i * 10})`)
-                    .style("display", "block");
+                    .style("display", "block")
+                    .style("background-color", "lightyellow");
         } else if (xValue <= 2022) {
                 annotation
                     .attr("x", mouseX + 5)
-                    .attr("y", mouseY - 5)
+                    .attr("y", 245)
                     .text(`year ${closestX.toString()} | 
                 headline: ${window.headline_cpi_dict[closestX].toFixed(2)},
                 energy: ${window.energy_cpi_dict?.closestX?.toFixed(2) ?? '-'},
