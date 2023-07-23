@@ -386,9 +386,20 @@ const makeAnnotations = d3.annotation()
             date: d => (x.invert(d.x)),
             close: d => y.invert(d.y)
     })
-    .annotations(annotations)
+    .annotations(annotations);
 
-d3.select("svg")
-    .append("g")
-    .attr("class", "annotation-group")
-    .call(makeAnnotations)
+
+setTimeout(function () {
+        d3.select("svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations)
+}, 1000);
+
+
+// const ann = d3.select("svg")
+//     .append("g")
+//     .attr("class", "annotation-group")
+//     .call(makeAnnotations)
+//     .transition() // Start the transition
+//     .delay(1000);
