@@ -13,7 +13,8 @@ const svg = d3.select("body")
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
+var cpi_keys=['Headline Consumer Price Inflation Index', 'Energy Consumer Price Inflation Index',
+    'Food Consumer Price Inflation Index', 'Core Consumer Price Inflation Index', 'Producer Price Inflation Index'];
 
 //Dropdown
 d3.select("#dropdown")
@@ -30,13 +31,38 @@ var x = d3.scaleLinear()
     .range([ 0, width ]);
 svg.append("g")
     .attr("transform", "translate(0," + height + ")")
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
     .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
+
+// Append the text to the x-axis
+svg.append("text")
+    .attr("x", width / 2) // Position the text in the middle of the x-axis
+    .attr("y", height + 30) // Position the text below the x-axis
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .text("Year")// Replace with your desired x-axis label text
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
+
 
 var y = d3.scaleLinear()
     .domain([-10,30])
     .range([ height, 0]);
 svg.append("g")
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
     .call(d3.axisLeft(y));
+
+svg.append("text")
+    .attr("transform", "rotate(-90)") // Rotate the label to be vertical
+    .attr("y", 0) // Set the y-coordinate position of the label
+    .attr("x", -height / 2) // Set the x-coordinate position of the label (negative half of the height)
+    .attr("dy", "-1.85em") // Adjust the vertical alignment of the label
+    .style("text-anchor", "middle") // Align the label at the middle of the rotated text
+    .text("Inflation index")
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
+;
 
 //Add horizontal gridlines
 const yGrid = svg.append("g")
@@ -67,14 +93,14 @@ svg.append("line")
 
 // legend data info
 const legendData = [
-    { label: "headline_cpi", color: "steelblue" },
-    { label: "energy_cpi", color: "brown" },
-    { label: "food_cpi", color: "purple" },
-    { label: "core_cpi", color: "orange" },
-    { label: "producer_pi", color: "darkgreen" }
+    { label: "Headline Consumer Price Inflation Index", color: "steelblue" },
+    { label: "Energy Consumer Price Inflation Index", color: "brown" },
+    { label: "Food Consumer Price Inflation Index", color: "purple" },
+    { label: "Core Consumer Price Inflation Index", color: "orange" },
+    { label: "Producer Price Inflation Index", color: "darkgreen" }
 ];
 
-let selectedOption = "headline_cpi";
+let selectedOption = "Headline Consumer Price Inflation Index";
 console.log("Selected option:", selectedOption);
 let legendItems = svg.selectAll(".legend-item")
     .data(legendData)
@@ -169,19 +195,19 @@ function mousemove() {
     let data;
     let fill;
     console.log('selectedOption in mouse' + selectedOption);
-    if (selectedOption === "headline_cpi"){
+    if (selectedOption === "Headline Consumer Price Inflation Index"){
         data = window.headline_cpi;
         fill = "steelblue";
-    } else if (selectedOption === "energy_cpi"){
+    } else if (selectedOption === "Energy Consumer Price Inflation Index"){
         data = window.energy_cpi;
         fill = "brown";
-    } else if (selectedOption === "food_cpi"){
+    } else if (selectedOption === "Food Consumer Price Inflation Index"){
         data = window.food_cpi;
         fill = "purple";
-    } else if (selectedOption === "core_cpi"){
+    } else if (selectedOption === "Core Consumer Price Inflation Index"){
         data = window.core_cpi;
         fill = "orange";
-    } else if (selectedOption === "producer_pi"){
+    } else if (selectedOption === "Producer Price Inflation Index"){
         data = window.producer_pi;
         fill = "darkgreen";
     }
@@ -238,7 +264,7 @@ d3.select("#dropdown")
             .style("display", d => (d.label === selectedOption) ? "inherit" : "none");
 
         svg.selectAll("rect").remove();
-        if(selectedOption === 'energy_cpi'){
+        if(selectedOption === 'Energy Consumer Price Inflation Index'){
             // Draw the bars
             svg.selectAll("rect")
                 .data(window.energy_cpi)
@@ -251,7 +277,7 @@ d3.select("#dropdown")
                 .duration(1500)
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "brown");
-        } else if (selectedOption === 'headline_cpi') {
+        } else if (selectedOption === 'Headline Consumer Price Inflation Index') {
             // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.headline_cpi)
@@ -264,7 +290,7 @@ d3.select("#dropdown")
                 .duration(1500)
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "steelblue");
-        } else if (selectedOption === 'core_cpi') {
+        } else if (selectedOption === 'Core Consumer Price Inflation Index') {
             // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.core_cpi)
@@ -277,7 +303,7 @@ d3.select("#dropdown")
                 .duration(1500)
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "orange");
-        } else if (selectedOption === 'food_cpi') {
+        } else if (selectedOption === 'Food Consumer Price Inflation Index') {
             // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.food_cpi)
@@ -290,7 +316,7 @@ d3.select("#dropdown")
                 .duration(1500)
                 .attr("height", d => Math.abs(y(d.y) - y(0)))
                 .attr("fill", "purple");
-        } else if (selectedOption === 'producer_pi') {
+        } else if (selectedOption === 'Producer Price Inflation Index') {
             // svg.selectAll("rect").remove();
             svg.selectAll("rect")
                 .data(window.producer_pi)

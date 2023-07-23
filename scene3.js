@@ -27,7 +27,7 @@ const svg = d3.select("body")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    .attr("transform", `translate(${margin.left+10}, ${margin.top})`);
 
 var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
 
@@ -86,8 +86,11 @@ var x = d3.scaleLinear()
     .range([0, width]);
 svg.append("g")
     .attr("class", "x-axis")
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
+
 
 // X axis
 // var x = d3.scaleBand()
@@ -105,9 +108,21 @@ svg.append("g")
 var y = d3.scaleLinear()
     .domain([-300,500])  // todo custom
     .range([ height, 0]);
-
 svg.append("g")
+    .attr("font-size", "14px")
+    .style("font-family", "Andale Mono")
     .call(d3.axisLeft(y));
+// Append the percentage symbol to the y-axis labels
+svg.selectAll(".tick text")
+    .text(function(d) { return d + "%"; });
+
+// svg.append("text")
+//     .attr("transform", "rotate(-90)") // Rotate the text to be vertical
+//     .attr("y", 0 - margin.left) // Adjust the vertical position
+//     .attr("x", 0 - height / 2) // Adjust the horizontal position
+//     .attr("dy", "1em") // Adjust the vertical alignment
+//     .style("text-anchor", "middle") // Center the text
+//     .text("%"); // Replace with your desired y-axis unit
 
 //Add horizontal gridlines
 const yGrid = svg.append("g")
@@ -181,11 +196,11 @@ const axisLabelsText =
     .enter()
     .append("text")
     .attr("class", "axis-label")
-    .attr("x", (d,i) => i * 200 + 50)
+    .attr("x", (d,i) => i * 200 + 75)
     .attr("y", height + 20)
     .attr("text-anchor", "start") // Center the text on the tick position
     .text(d => d)
-    .style("font-size", "20px")
+    .style("font-size", "16px")
     .style("font-family", "Andale Mono");
 
 
@@ -222,7 +237,7 @@ function updatePer(year_start, year_end) {
         .enter()
         .append("rect")
         .attr("y", d => (d >= 0) ? y(d) : y(0))
-        .attr("x", (d,i) => i * 200 + 100)
+        .attr("x", (d,i) => i * 200 + 75)
         .attr("width", xScale.bandwidth() * 5)
         .transition()
         .duration(800)
@@ -297,7 +312,7 @@ svg.selectAll("rect")
     .enter()
     .append("rect")
     .attr("y", d => (d >= 0) ? y(d) : y(0))
-    .attr("x", (d,i) => i * 200 + 100)
+    .attr("x", (d,i) => i * 200 + 75)
     .attr("width", xScale.bandwidth() * 5)
     .transition()
     .duration(1500)

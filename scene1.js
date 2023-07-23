@@ -30,7 +30,18 @@ var x = d3.scaleLinear()
     .range([ 0, width ]);
 svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickFormat(d3.format(".0f")));
+    .style("font-family", "Andale Mono")
+    .style("font-size", "12px")
+    .call(d3.axisBottom(x).tickFormat(d3.format(".0f")))
+;
+// Append the text to the x-axis
+svg.append("text")
+    .attr("x", width / 2) // Position the text in the middle of the x-axis
+    .attr("y", height + 30) // Position the text below the x-axis
+    .attr("text-anchor", "middle") // Center the text horizontally
+    .text("Year")// Replace with your desired x-axis label text
+        .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
 
 // Add Y axis
 var y = d3.scaleLinear()
@@ -38,7 +49,20 @@ var y = d3.scaleLinear()
     .range([ height, 0]);
 svg.append("g")
     .attr("class", "yTicks")
+    .style("font-family", "Andale Mono")
+    .style("font-size", "10px")
     .call(d3.axisLeft(y));
+
+svg.append("text")
+    .attr("transform", "rotate(-90)") // Rotate the label to be vertical
+    .attr("y", 0) // Set the y-coordinate position of the label
+    .attr("x", -height / 2) // Set the x-coordinate position of the label (negative half of the height)
+    .attr("dy", "-1.85em") // Adjust the vertical alignment of the label
+    .style("text-anchor", "middle") // Align the label at the middle of the rotated text
+    .text("Inflation index")
+    .attr("font-size", "12px")
+    .style("font-family", "Andale Mono")
+;
 
 //Add horizontal gridlines
 const yGrid = svg.append("g")
@@ -167,7 +191,7 @@ legendItems.append("circle")
     .attr("r", 8)
     .attr("fill", d => d.color);
 
-// Add labels
+// Add legend
 legendItems.append("text")
     .attr("x", 20)
     .attr("y", 12)
