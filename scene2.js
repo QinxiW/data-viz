@@ -201,6 +201,7 @@ function mousemove() {
         .attr("y", y(selectedData.y)-20)
         .style("left", (d3.mouse(this)[0])+90 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
         .style("top", (d3.mouse(this)[1])+100 + "px")
+        .style("font-family", "Andale Mono")
         .raise();
 }
 function mouseout() {
