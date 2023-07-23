@@ -44,6 +44,7 @@ d3.select("#slider")
         output.text('Start Year: ' + this.value);
         console.log("selectedStartYear:", selectedStartYear);
         updatePer(selectedStartYear, selectedEndYear);
+        d3.select("#slider2").attr("min", parseInt(selectedStartYear) + 1);
     });
 
 d3.select("#slider2")
@@ -52,6 +53,7 @@ d3.select("#slider2")
         output2.text('End Year: '+ this.value);
         console.log("selectedEndYear:", selectedEndYear);
         updatePer(selectedStartYear, selectedEndYear);
+        d3.select("#slider").attr("max", selectedEndYear-1);
     });
 
 let headline_endValue = window.headline_cpi_dict[selectedEndYear]
