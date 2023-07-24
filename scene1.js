@@ -170,11 +170,11 @@ svg.append("path")
 
 // legend info
 const legendData = [
-        { label: "headline_cpi", color: "steelblue" },
-        { label: "energy_cpi", color: "brown" },
-        { label: "food_cpi", color: "purple" },
-        { label: "core_cpi", color: "orange" },
-        { label: "producer_pi", color: "darkgreen" }
+        { label: "Headline CPI", color: "steelblue" },
+        { label: "Energy CPI", color: "brown" },
+        { label: "Food CPI", color: "purple" },
+        { label: "Core CPI", color: "orange" },
+        { label: "Producer PI", color: "darkgreen" }
 ];
 
 const legendItems = svg.selectAll(".legend-item")

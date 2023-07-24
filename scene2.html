@@ -56,13 +56,16 @@
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
 <div id="app">
-    <h2 style="margin-left: 14px;"> US Inflation by Category 1970 - 2022</h2>
+    <h2 style="margin-left: 14px; font-family: Helvetica;"> Interactive Visualization US Inflation by Category 1970 - 2022</h2>
+    <p style="margin-left: 14px;"><i>Here we take a closer look at specific inflation category drill down. Select the type
+        of interest from the dropdown menus below, and hover over chart to explore selected inflation changes over the years.</br></i></p>
     <button onclick="location.href='index.html'" type="button" class="button">
         << Previous </button>
     <select id="dropdown" class="button dropdown"></select>
     <button onclick="location.href='scene3.html'" type="button" class="button2">
         Next >> </button>
-    <p></p>
+    <p style="margin-left: 24px; color:grey;"> * Note the data was scrapped from worldbank.org and for US the annual data was missing for
+        Energy Consumer Price Inflation Index until 2014</p>
 </div>
 <script src="scene2.js"></script>
 </body>
