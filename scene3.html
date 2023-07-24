@@ -45,7 +45,11 @@
 <title>Narrative Viz on US Inflation 1970 - 2022</title>
 <body>
 <div id="app">
-    <h2 style="margin-left: 14px;">US Inflation Percentage (%) Change over Start and End Year Between 1970 - 2022</h2>
+    <h2 style="margin-left:16px; font-family: Helvetica;">US Inflation Percentage (%) Change over Start and End Year Between 1970 - 2022</h2>
+    <p style="margin-left:14px; padding-left:14px; margin-right:150px;"><i>Now that we have seen the YoY trends in these category; to further explore the
+        measure of the average change over time in the prices paid by consumer and producer, we provide the following
+        chart for examining percentage change between any given start year and any given end year by selecting them from the sliders below.
+        <br>Note that End Year needs to be strictly greater than Start Year, which is enforced in the slider UI.</br></i></p>
     <button onclick="location.href='scene2.html'" type="button" class="button">
         << Previous</button>
     <button onclick="location.href='index.html'" type="button" class="button button2">
@@ -61,7 +65,8 @@
         <output id="value2" style="font-size: 12pt;"></output>
         <input type="range" min="1970" max="2022" value="2022" step="1"
                id="slider2" onchange="(this.value)" style="margin-right: 30px;width: 25%;">
-        <p></p>
+        <p style="color:grey;"> * Note the data was scrapped from worldbank.org and for US the annual data was missing for
+            Energy CPI until 2014, meaning no data is displayed for that category if start year is prior to that</p>
     </div>
 </div>
 <script src="scene3.js">

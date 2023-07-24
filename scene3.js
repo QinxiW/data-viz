@@ -29,7 +29,7 @@ const svg = d3.select("body")
     .append("g")
     .attr("transform", `translate(${margin.left+10}, ${margin.top})`);
 
-var cpi_keys=['headline_cpi', 'energy_cpi', 'food_cpi', 'core_cpi', 'producer_pi'];
+var cpi_keys=['Headline CPI', 'Energy CPI', 'Food CPI', 'Core CPI', 'Producer PI'];
 
 let selectedStartYear = this.slider.value ? this.slider.value : 1970;
 let selectedEndYear = this.slider2.value ? this.slider2.value : 2022;
@@ -277,7 +277,7 @@ function updatePer(year_start, year_end) {
             .style("left", `${d3.event.pageX}px`)
             .style("top", `${d3.event.pageY - 50}px`);
         tooltip.html(`Percentage change: ${data[d].toFixed(2)}%, 
-            Inflation type: ${cpi_keys[d]}, Year range: ${year_start} - ${year_end}`);
+            Inflation category: ${cpi_keys[d]}, Year range: ${year_start} - ${year_end}`);
     })
         .on("mouseout", function () {
             d3.selectAll(".tooltip").remove();
@@ -339,7 +339,7 @@ svg.selectAll("rect").on("mouseover", function (event, d) {
         .style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY - 50}px`);
     tooltip
-        .html(`Percentage change: ${data[d].toFixed(2)}%, Inflation type: ${cpi_keys[d]}, Year range: ${selectedStartYear} - ${selectedEndYear}`)
+        .html(`Percentage change: ${data[d].toFixed(2)}%, Inflation category: ${cpi_keys[d]}, Year range: ${selectedStartYear} - ${selectedEndYear}`)
         .style("font-family", "Andale Mono");
 })
     .on("mouseout", function () {
